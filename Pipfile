@@ -19,6 +19,7 @@ qrcode = {extras = ["pil"], version = "*"}
 flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 firebase-admin = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
