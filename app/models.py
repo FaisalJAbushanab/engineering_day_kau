@@ -24,7 +24,7 @@ class User(db.Model, UserMixin):
     qrcode = db.Column(db.String(20))
     field = db.Column(db.String(60))
     created_at= db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    status = db.Column(db.String(6), nullable=False, default='pending')
+    status = db.Column(db.String(8), nullable=False, default='pending')
     roles = db.Column(db.String(60), default="Guest")
 
     def get_reset_token(self, expires_sec=18000):
