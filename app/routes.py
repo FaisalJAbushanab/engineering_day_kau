@@ -92,7 +92,7 @@ def register():
             img = qr.make_image(fill_color="green", back_color="white")
             img.save('app/static/images/qrcodes/' + qr_code + '.png','PNG')
             path = 'app/static/images/qrcodes/' + qr_code + '.png'
-            path_to = '/'+created.id+'/'+qr_code+'.png'
+            path_to = '/'+int(created.id)+'/'+qr_code+'.png'
             firebase = firebaseStore(path, path_to)
             if firebase == 'success':
                 os.remove(path)
