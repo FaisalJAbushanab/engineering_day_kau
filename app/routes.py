@@ -196,14 +196,14 @@ def viewCard(user_id):
             flash('لا يمكن تنفيذ العملية', )
             return redirect(url_for('viewCard', user_id=user.id))
 
-    path = 'qrcodes/'+ user.qrcode+'.png'
+    path = 'qrcodes/'+ str(user.id) + '/' + user.qrcode+'.png'
     qrcode_link = getURL(path)
     return render_template('admin/card.html', user=user, qr=qrcode_link, form=form)
 
 @app.route('/home')
 @login_required
 def home():
-    path = 'qrcodes/'+ current_user.qrcode+'.png'
+    path = 'qrcodes/'+ str(current_user.id) + '/' + current_user.qrcode+'.png'
     qrcode_link = getURL(path)
     return render_template('auth/home.html', user = current_user, qr = qrcode_link)
 
