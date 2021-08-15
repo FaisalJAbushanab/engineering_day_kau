@@ -18,13 +18,13 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key= True)
     email = db.Column(db.String(150), unique=True)
-    unId = db.Column(db.String(7), unique=True, nullable=False)
+    unId = db.Column(db.String(10), unique=True, nullable=False)
     password = db.Column(db.String(60), nullable=False)
     full_name = db.Column(db.String(150))
     qrcode = db.Column(db.String(20))
     field = db.Column(db.String(60))
     created_at= db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    status = db.Column(db.String(8), nullable=False, default='pending')
+    status = db.Column(db.String(10), nullable=False, default='pending')
     roles = db.Column(db.String(60), default="Guest")
 
     def get_reset_token(self, expires_sec=18000):
