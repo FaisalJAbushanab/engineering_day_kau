@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block title %}Engineering Day 22{% endblock %}
+{% block content %}
+
+<style>
+    #background{
+        background-image: url('/static/images/background1.jpg');
+        background-position: bottom;
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+        height: auto;
+        position: relative;
+        overflow: hidden;
+    }
+    .overlay{
+        background-color: #198731b0;
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        overflow: hidden;
+    }
+    .overlay0{
+        background-color: rgba(0, 0, 0, 0.575);
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        overflow: hidden;
+    }
+    #background .container{
+        font-family: 'Tajawalbold' !important;
+        color: white;
+        position: relative;
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 50px;
+
+    }
+    .box{
+        background-color: white;
+        box-shadow: 1px 1px 7px black;
+        border-radius: 4px;
+        padding: 30px;
+        font-family: 'Tajawal';
+    }
+    .box p{
+        text-align: center;
+        color: #363636;
+        font-size: 20px;
+        clear: both;
+        width: 95%;
+    }
+    .box p img{
+        border-radius: 10%;
+        width: 200px;
+        box-shadow: 1px 1px 7px black;
+        margin: 15px;
+        text-align: center;
+    }
+    .right{
+        float: right;
+    }
+    .left{
+        float: left;
+    }
+
+</style>
+
+<div id="background">
+    <div class="overlay0"></div>
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="col-xs-12 box">
+            <p>
+            <img src="{{ qr }}" alt="">
+            </p>
+            <p style="font-weight: bold;">
+                {{ user.full_name }}
+            </p>  
+            <hr style="border: 1px solid rgb(38, 196, 38);">  
+            <br> 
+            <p>
+                <span class="right">البريد الإلكتروني: </span>
+                <span class="left">    {{ user.email }} </span>
+            </p>  
+            <br>
+            <p>
+                <span class="right">التخصص: </span>
+                <span id="field" class="left">    {{ user.field }} </span>
+            </p>  
+            <br>
+            <p>
+                <span class="right">تاريخ التسجيل: </span>
+                <span class="left">    {{ user.created_at.strftime('%Y-%m-%d') }} </span>
+            </p>   
+            <br> <br>
+            {% if(user.roles == 'Mod') %}
+            <p style="text-align: center;">
+                <span style="background-color: rgba(65, 105, 225, 0.733); color: white; padding: 0 100px; text-align: center;">منظم</span>
+            </p>
+            {% elif(user.roles == 'Admin') %}  
+            <p style="text-align: center;">
+                <span style="background-color: rgba(225, 65, 65, 0.733); color: white; padding: 0 100px; text-align: center;">الإدارة</span>
+            </p>
+            {% else %}    
+            <p>
+                <span style="background-color: rgba(38, 196, 38, 0.726); color: white; padding: 0 100px; text-align: center;">حضور</span>
+            </p>  
+            {% endif %}                                                   
+        </div>
+    </div>
+</div>
+
+<script>
+    var field = document.getElementById('field');
+    function truncateMe(){
+        if(field.textContent.length > 24){
+            field.textContent = field.textContent.substring(0, 24) + "...";
+        }
+
+    };
+    truncateMe();
+</script>
+
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Engineering Day 22 | لا يمكن الوصول للصفحة{% endblock %}
+{% block content %}
+<style>
+    #background{
+        background-image: url('/static/images/background1.jpg');
+        background-position: bottom;
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+        height: 531px;
+        position: relative;
+        overflow: hidden;
+    }
+    .overlay{
+        background-color: #198731b0;
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        overflow: hidden;
+    }
+    .overlay0{
+        background-color: rgba(0, 0, 0, 0.575);
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        overflow: hidden;
+    }
+    #background .container{
+        font-family: 'Tajawalbold' !important;
+        color: white;
+        position: relative;
+        text-align: center;
+        margin-top: 200px;
+
+    }
+    #background .container h1{
+        font-family: 'Tajawalbold';
+    }
+    .join{
+        color: white;
+        padding: 10px 40px;
+        margin: 30px;
+        text-align: center;
+        background-color: #1ce822;
+        text-decoration: none;
+        font-size: 22px;
+    }
+</style>
+<div id="background">
+    <div class="overlay0"></div>
+    <div class="overlay"></div>
+    <div class="container">
+        <h1>خطأ (404)</h1>
+        <p>لا يمكن الوصول للصفحة المطلوبة :( , الرجاء التحقق من كتابة عنوان الصفحة بشكل صحيح والمحاولة مرة اخرى</p>
+    </div>
+</div>
+
+{% endblock %}

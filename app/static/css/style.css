@@ -1,0 +1,21 @@
+@font-face {
+    font-family: 'Tajawal';
+    src: url('../fonts/Tajawal-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Tajawal-medium';
+    src: url('../fonts/Tajawal-Medium.ttf');
+    font-weight: normal;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: 'Tajawalbold';
+    src: url('../fonts/Tajawal-Bold.ttf');
+    font-weight: normal;
+    font-style: normal;
+  }
+  .invalid-feedback{
+    display: block;
+  }

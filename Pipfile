@@ -1,0 +1,26 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+flask-sqlalchemy = "*"
+flask-bcrypt = "*"
+flask-mail = "*"
+flask-wtf = "*"
+flask-login = "*"
+pyasn1 = "*"
+gunicorn = "*"
+email-validator = "*"
+flask-babelex = "*"
+flask-user = "*"
+qrcode = {extras = ["pil"], version = "*"}
+flask-marshmallow = "*"
+marshmallow-sqlalchemy = "*"
+firebase-admin = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"

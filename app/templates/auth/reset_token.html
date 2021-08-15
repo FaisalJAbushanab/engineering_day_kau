@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% block title %}منصة حلقة 📿 | اعادة تعين كلمة المرور {% endblock %}
+{% block content %}
+
+<style>
+    #background{
+          background-image: url('/static/images/background1.jpg');
+          background-position: bottom;
+          background-repeat: no-repeat;
+          background-size: cover;
+          width: 100%;
+          height: auto;
+          position: relative;
+          font-family: 'Tajawal-medium';
+          color: #363636;
+          overflow: auto;
+      }
+    .overlay{
+        background-color: #198731b0;
+        width: 100%;
+        position: absolute;
+        height: 100%;
+    }
+    .overlay0{
+        background-color: rgba(0, 0, 0, 0.575);
+        width: 100%;
+        position: absolute;
+        height: 100%;
+    }
+    .container{
+      margin-top: 50px;
+      margin-bottom: 50px;
+      position: relative;
+      z-index: 100;
+    }
+    form{
+      text-align: center;
+    }
+    .box{
+      background-color: white;
+      box-shadow: 1 1 1 black;
+    }
+    .col-xs-12{
+      width: 90%;
+      margin: 0 auto;
+    }
+    .submitbutton{
+          color: white;
+          padding: 10px 40px;
+          margin: 30px;
+          text-align: center;
+          background-color: #1abc9c;
+          text-decoration: none;
+          font-size: 22px;
+          border: none;
+          outline: none;
+      }
+    </style>
+
+<div id="background">
+    <div class="overlay0"></div>
+    <div class="overlay"></div>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-6 col-xs-12">
+    
+          </div>
+          <div class="col-md-6 col-xs-12 box">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+                <br><br>
+                <h1>تعين كلمة مرور</h1>
+        
+        
+                <br>
+                <div class="mb-3">
+                {{ form.password.label(class="form-label") }}
+                {% if form.password.errors %}
+                {{ form.password(placeholder="passwordecample", class="form-control is-invaild") }}
+                <div class="invalid-feedback">
+                  {% for error in form.password.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.password(placeholder="passwordecample", class="form-control") }}
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ form.confirm_password.label(class="form-label") }}
+                {% if form.confirm_password.errors %}
+                {{ form.confirm_password(placeholder="new password", class="form-control is-invaild") }}
+                <div class="invalid-feedback">
+                  {% for error in form.password.errors %}
+                  <span>{{ error }}</span>
+                  {% endfor %}
+                </div> 
+                {% else %}
+                {{ form.confirm_password(placeholder="confirm new password", class="form-control") }}
+                {% endif %}
+                </div>
+                {{ form.submit(class='submitbutton', style="width: auto;") }}
+              </form>
+
+    </div>
+  </div>
+</div>
+
+</div>
+
+<br><br>
+
+{% endblock %}

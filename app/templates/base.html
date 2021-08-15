@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        
+        <link rel="icon" href="/../static/images/webicon.png">
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="stylesheet" href="../static/css/style.css">
+    </head>
+    <style>
+      body{
+        background-color: rgb(228, 228, 228)!important;
+      }
+      .navbar-toggler, .navbar-toggler:focus-visible, .navbar-toggler:focus{
+        border: none;
+        outline: none;
+        box-shadow: none;
+      }
+      .bar1, .bar2, .bar3 {
+            width: 40px;
+            height: 5px;
+            background-color: #57B549;
+            margin: 6px 0;
+            transition: 0.4s;
+            border-radius: 2px;
+          }
+      .change .bar1 {
+            -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+            transform: rotate(-45deg) translate(-9px, 6px);
+          }
+          
+          .change .bar2 {opacity: 0;}
+          
+          .change .bar3 {
+            -webkit-transform: rotate(45deg) translate(-8px, -8px);
+            transform: rotate(45deg) translate(-8px, -8px);
+          }
+          .alert{
+            width: 90%;
+            margin: 30px auto;
+          }
+          .alert span{
+            margin-left: 30px;
+          }
+          .invalid-feedback{
+            display: block;
+          }
+    </style>
+    <body>
+       
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{{ url_for('index') }}">
+            <img src="/../static/images/logo.svg" alt="" width="200" height="67"  class="d-inline-block align-text-top">
+          </a>
+
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation" onclick="myFunction(this)">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mb-2 mb-lg-0">
+              {% if current_user.is_authenticated %}
+                <!-- put code for username and avatar-->
+                <li class="nav-item">
+                  <a class="nav-link {{'item-active' if page and page == 'home' }}" href="{{ url_for('home') }}">بطاقتي الإلكترونية</a>
+                </li>
+                {% if current_user.roles  != 'Guest' %}
+                <li class="nav-item">
+                  <a class="nav-link {{'item-active' if page and page == 'dashboard' }}" href="{{ url_for('dashboard') }}">لوحة الإدارة</a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                  <a class="nav-link {{'item-active' if page and page == 'home' }}" href="{{ url_for('info') }}">تعديل بياناتي</a>
+                </li>
+              
+              <li class="nav-item">
+                <a class="nav-link {{'item-active' if page and page == 'contact' }}" href="/contact-us">تواصل معنا</a>
+              </li>
+    
+              <li class="nav-item">
+                <a class="nav-link" href="{{  url_for('logout')  }}">
+                  تسجيل الخروج
+                </a>
+              </li>
+             
+              {% else %}
+              <li class="nav-item">
+                <a class="nav-link  {{'item-active' if page and page == 'index' }}" href="{{  url_for('index')  }}">الرئيسية</a>
+              </li>
+
+              <li class="nav-item">
+                <a class="nav-link  {{'item-active' if page and page == 'indexخg' }}" href="{{  url_for('index')  }}">عن البوابة</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link  {{'item-active' if page and page == 'indexخg' }}" href="{{  url_for('index')  }}">اتصل بنا</a>
+              </li>
+    
+              <!-- <li class="nav-item">
+                <a class="nav-link {{'item-active' if page and page == 'contact' }}" href="/contact-us">عن بوابة الهندسة</a>
+              </li> -->
+    
+            </ul>
+            <ul class="navbar-nav mb-2 mb-lg-0 me-auto d-flex">
+              <li class="nav-item">
+                <a href="{{  url_for('login')  }}">
+    
+                  <button class="btn">دخول</button>
+                </a>
+              </li>
+              <li class="nav-item line">
+                <a class="nav-link" href="#">|</a>
+              </li>
+              
+              <li class="nav-item">
+                <a href="{{  url_for('register')  }}">
+                <button class="btn">الانضمام</button>
+              </a>
+              </li>
+            </ul>
+            {% endif %}
+          </div>
+
+        </div>
+      </nav>
+
+
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <div class="alert alert-{{ category }}">
+    <span style="color: #363636; float: right; cursor: pointer; font-weight: bold;" onclick="closeAlert(this)">x</span>
+    {{ message }}
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+
+  <!--       Flashing messages             -->
+  {% block content %}
+  {% endblock %}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script>
+    function myFunction(x) {
+      x.classList.toggle("change");
+    }
+    function closeAlert(x) {
+      x.parentNode.style.display="none";
+    }
+    var myModal = new bootstrap.Modal(document.getElementById("staticBackdrop"), {});
+    document.onreadystatechange = function () {
+        if(document.getElementById('staticBackdrop').classList.contains('error')){
+            myModal.show();
+        }
+    };
+    </script>
+</body>
+
+</html>

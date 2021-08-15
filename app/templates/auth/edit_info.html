@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% block title %}Engineering Day 22{% endblock %}
+{% block content %}
+
+<style>
+    #background{
+        background-image: url('/static/images/background1.jpg');
+        background-position: bottom;
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+        height: auto;
+        position: relative;
+        overflow: hidden;
+    }
+    .overlay{
+        background-color: #198731b0;
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        overflow: hidden;
+    }
+    .overlay0{
+        background-color: rgba(0, 0, 0, 0.575);
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        overflow: hidden;
+    }
+    #background .container{
+        font-family: 'Tajawalbold' !important;
+        color: white;
+        position: relative;
+        text-align: center;
+        margin-top: 50px;
+        margin-bottom: 50px;
+
+    }
+    .box{
+        background-color: white;
+        color: #363636;
+        box-shadow: 1px 1px 7px black;
+        border-radius: 4px;
+        padding: 30px;
+        font-family: 'Tajawal';
+    }
+    .box p{
+        text-align: center;
+        color: #363636;
+        font-size: 20px;
+        clear: both;
+        width: 95%;
+    }
+    .box p img{
+        border-radius: 100%;
+        width: 200px;
+        box-shadow: 1px 1px 7px black;
+        margin: 15px;
+        text-align: center;
+    }
+    .right{
+        float: right;
+    }
+    .left{
+        float: left;
+    }
+    .submitbutton{
+        color: white;
+        padding: 10px 40px;
+        margin: 30px;
+        text-align: center;
+        background-color: #1abc9c;
+        text-decoration: none;
+        font-size: 22px;
+        border: none;
+        outline: none;
+    }
+
+</style>
+
+<div id="background">
+    <div class="overlay0"></div>
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="col-xs-12 box">
+            <form action="" method="POST">
+                <div class="mb-3 row">
+                    {{ form.fullname.label(class="col-sm-2 col-form-label") }}
+                    <div class="col-sm-10">
+                        {% if form.fullname.errors %}
+                        {{ form.fullname(class="is-invalid form-control") }}
+                        <div class="invalid-feedback">
+                          {% for error in form.fullname.errors %}
+                          <span>{{ error }}</span>
+                          {% endfor %}
+                        </div>
+                        {% else %}
+                        {{ form.fullname(class="form-control") }}
+                        {% endif %}
+                    </div>
+                  </div>
+            <div class="mb-3 row">
+                <label for="staticEmail" class="col-sm-2 col-form-label">البريد الإلكتروني</label>
+                <div class="col-sm-10">
+                  <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="email@example.com">
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label for="staticEmail" class="col-sm-2 col-form-label">تاريخ التسجيل</label>
+                <div class="col-sm-10">
+                  <input type="text" readonly class="form-control-plaintext" id="staticEmail" value="{{ user.created_at.strftime('%Y-%m-%d')  }}">
+                </div>
+              </div>
+              <div class="mb-3 row">
+                {{ form.field.label(class="col-sm-2 col-form-label") }}
+                <div class="col-sm-10">
+                    {% if form.field.errors %}
+                    {{ form.field(class="is-invalid form-select") }}
+                    <div class="invalid-feedback">
+                      {% for error in form.field.errors %}
+                      <span>{{ error }}</span>
+                      {% endfor %}
+                    </div>
+                    {% else %}
+                    {{ form.field(placeholder="password confirmation", class="form-select") }}
+                    {% endif %}
+                </div>
+              </div>
+              <div class="mb-3 row">
+                {{ form.password.label(class="col-sm-2 col-form-label") }}
+                <div class="col-sm-10">
+                {{ form.password(class="form-control") }}
+                </div>
+              </div> 
+              {{ form.submit(class="submitbutton") }}   
+            </form>                                        
+        </div>
+    </div>
+</div>
+
+{% endblock %}
