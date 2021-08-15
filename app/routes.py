@@ -43,7 +43,7 @@ def getURL(path):
 
 def firebaseStore(file, to):
     bucket = admin_storage.bucket()
-    destination = 'qrcodes/'+ to + '.png'
+    destination = 'qrcodes/'+ to
     blob = bucket.blob(destination)
     blob.upload_from_filename(file)
     return 'success'
@@ -92,8 +92,9 @@ def register():
             img = qr.make_image(fill_color="green", back_color="white")
             img.save('app/static/images/qrcodes/' + qr_code + '.png','PNG')
             path = 'app/static/images/qrcodes/' + qr_code + '.png'
-            firebase = firebaseStore(path, qr_code)
-            if firebase:
+            path_to = '/'+created.id+'/'+qr_code+'.png'
+            firebase = firebaseStore(path, path_to)
+            if firebase == 'success':
                 os.remove(path)
         token = s.dumps(created.email, salt='email-confirm')
 
