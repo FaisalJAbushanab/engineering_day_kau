@@ -81,7 +81,7 @@
             <br> 
             <p>
                 <span class="right">البريد الإلكتروني: </span>
-                <span class="left">    {{ user.email }} </span>
+                <span id="field" class="left">    {{ user.email }} </span>
             </p>  
             <br>
             <p>
@@ -113,13 +113,21 @@
 
 <script>
     var field = document.getElementById('field');
+    var email = document.getElementById('email');
     function truncateMe(){
-        if(field.textContent.length > 24){
-            field.textContent = field.textContent.substring(0, 24) + "...";
+        if(field.textContent.length > 13){
+            field.textContent = field.textContent.substring(0, 11) + "...";
+        }
+
+    };
+    function truncateMe2(){
+        if(email.textContent.length > 13){
+            email.textContent = email.textContent.substring(0, 11) + "...";
         }
 
     };
     truncateMe();
+    truncateMe2();
 </script>
 
 {% endblock %}

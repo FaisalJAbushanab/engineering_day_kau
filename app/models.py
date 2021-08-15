@@ -18,7 +18,7 @@ class User(db.Model, UserMixin):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key= True)
     email = db.Column(db.String(150), unique=True)
-    unId = db.Column(db.String(10), unique=True, nullable=False)
+    unId = db.Column(db.String(10), nullable=False)
     password = db.Column(db.String(60), nullable=False)
     full_name = db.Column(db.String(150))
     qrcode = db.Column(db.String(20))

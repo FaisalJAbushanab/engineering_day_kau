@@ -20,7 +20,7 @@ class RegistrationForm(FlaskForm):
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
-            raise ValidationError('تم التسجيل باستخدام هذا البريد الإلكتروني مسبقاَ، برجاء استخدام بريد اخر')
+            raise ValidationError('هذا البريد مستخدم من قبل، اذا كنت قد نسيت كلمة المرور الرجاء الضغط على نسية كلمة المرور لتعين كلمة مرور جديدة')
 
     def validate_field(self, field):
         data = ['هندسة مستجد', 'هندسة الطيران', 'الهندسة الكيميائية وهندسة المواد', 'الهندسة المدنية والبيئية', 'الهندسة الكهربائية وهندسة الحاسبات', 'الهندسة الصناعية', 'الهندسة النووية', 'هندسة الإنتاج وتصميم النظم الميكانيكية', 'هندسة التعدين', 'الهندسة الحرارية']
@@ -30,7 +30,6 @@ class RegistrationForm(FlaskForm):
     def validate_unid(self, unid):
         if not unid.data.isdecimal():
             raise ValidationError('الرقم الجامعي غير صحيح')
-
 class LoginForm(FlaskForm):
     email = StringField('البريد الإلكتروني',
                             validators=[DataRequired(), Email()])
