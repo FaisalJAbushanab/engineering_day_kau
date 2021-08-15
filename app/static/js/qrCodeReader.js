@@ -21,7 +21,13 @@ qrcode.callback = res => {
         outputData.innerHTML += '<p> البريد الآلكتروني: ' + data.email + '</p>'; 
         outputData.innerHTML += '<p> التخصص: ' + data.field + '</p>';
         outputData.innerHTML += '<p> تاريخ التسجيل: ' + data.created_at + '</p>';
-        outputData.innerHTML += '<p> نوع العضوية: ' + (data.roles == 'Admin'? 'زائر' : data.roles == 'Mod' ? 'حضور' : 'منظم') + '</p>';
+        if(data.roles == 'Admin'){
+        outputData.innerHTML += '<p> نوع العضوية: الادارة</p>';
+        }else if( data.roles == 'Mod'){
+          outputData.innerHTML += '<p> نوع العضوية: منظم</p>';
+        }else{
+          outputData.innerHTML += '<p> نوع العضوية: الحضور</p>';
+        }
         outputData.innerHTML += '<p> <a href="/qrcode-scan" class="again"> مسح آخر </a> </p>' ;
 
     }
