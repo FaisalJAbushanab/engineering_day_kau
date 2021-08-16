@@ -8,6 +8,7 @@ const qrResult = document.getElementById("qr-result");
 const outputData = document.getElementById("outputData");
 const btnScanQR = document.getElementById("btn-scan-qr");
 
+
 let scanning = false;
 
 qrcode.callback = res => {
@@ -17,6 +18,7 @@ qrcode.callback = res => {
     if(res.startsWith('checkout/user/')){
       fetch(res).then(res => res.json())
       .then(data => {
+        outputData.innerHTML = '';
         outputData.innerHTML += '<p> الاسم الثلاثي: ' + data.full_name + '</p>'; 
         outputData.innerHTML += '<p> البريد الآلكتروني: ' + data.email + '</p>'; 
         outputData.innerHTML += '<p> التخصص: ' + data.field + '</p>';
@@ -28,8 +30,23 @@ qrcode.callback = res => {
         }else{
           outputData.innerHTML += '<p> نوع العضوية: الحضور</p>';
         }
-        outputData.innerHTML += '<p> <a href="/qrcode-scan" class="again"> مسح آخر </a> </p>' ;
-
+        outputData.innerHTML += '<p> <a id="again" class="again"> مسح آخر </a> </p>' ;
+        const again = document.getElementById("again");
+        again.onclick = () => {
+          navigator.mediaDevices
+            .getUserMedia({ video: { facingMode: "environment" } })
+            .then(function(stream) {
+              scanning = true;
+              qrResult.hidden = true;
+              btnScanQR.hidden = true;
+              canvasElement.hidden = false;
+              video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
+              video.srcObject = stream;
+              video.play();
+              tick();
+              scan();
+            });
+        };
     }
       )  
       .catch(error => console.log('Error'))
@@ -60,6 +77,7 @@ window.onload = () => {
       scan();
     });
 };
+
 
 function tick() {
   canvasElement.height = video.videoHeight;
