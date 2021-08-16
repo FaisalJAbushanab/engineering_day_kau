@@ -1,9 +1,11 @@
+from datetime import timedelta
 from operator import sub
 from flask import render_template, url_for, flash, redirect, request, jsonify, abort
 import flask
 from flask_login.utils import login_required
 from flask_wtf.recaptcha import fields
 from pyasn1.type.univ import Null
+from sqlalchemy.sql.expression import true
 from app.models import User, UserSchema
 from app.forms import (RegistrationForm, LoginForm, UpdateInfoForm,
                         UpdatePermissionsForm, RequestResetForm, ResetPasswordForm)
@@ -139,7 +141,7 @@ def login():
             user = User.query.filter_by(email=em).first()
             if user and bcrypt.check_password_hash(user.password, form.password.data):
                 if user.status == 'activated':
-                    login_user(user)
+                    login_user(user, remember=true, duration=timedelta(days=3))
                     return redirect(url_for('index'))
                 else:
                     flash('لا يمكنك الدخول بسبب عدم تأكيد تسجيلك من خلال الضغط على الرابط المرسل على بريدك، الرجاء تأكيد التسجيل', 'danger')
