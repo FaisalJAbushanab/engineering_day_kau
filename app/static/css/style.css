@@ -19,3 +19,15 @@
   .invalid-feedback{
     display: block;
   }
+  #tocolor {
+    text-align: center;
+    font-family: Dubai;
+    padding: 5px;
+    font-size: 20px;
+    text-decoration: none;
+    background:#212529;
+    color: white;
+    position: relative !important;
+    bottom: 0;
+    height: auto;
+  }
