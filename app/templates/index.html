@@ -2,6 +2,9 @@
 {% block title %}Engineering Day 22{% endblock %}
 {% block content %}
 <style>
+    body{
+        font-family: 'Tajawal';
+    }
     #background{
         background-image: url('/static/images/background1.jpg');
         background-position: bottom;
@@ -46,6 +49,46 @@
         text-decoration: none;
         font-size: 22px;
     }
+    #time{
+        width: 100%;
+        padding: 5px;
+        background-color: white;
+        font-family: 'Tajawalbold';
+        font-size: 28px;
+        color: #008037;
+    }
+    #countdown{
+        text-align: center;
+    }
+    .big{
+        font-size: 62px;
+        margin: 0;
+        line-height: .9;
+    }
+    .text{
+        word-spacing: 55px;
+        margin: 0;
+        font-size: 19px;
+    }
+    #video{
+        background: #76b852;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #8DC26F, #76b852);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #8DC26F, #76b852); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        text-align: center;
+        padding: 15px;
+        height:auto;
+    }
+    #timeline{
+        background-color: white;
+    }
+    #background .icons{
+        color: white;
+        margin-top: 30px;
+    }
+    .ic{
+        width: 25px;
+        display: inline;
+    }
 </style>
 <div id="background">
     <div class="overlay0"></div>
@@ -56,7 +99,96 @@
         <p style="margin-top: 30px;">
             <a href="{{ url_for('register') }}" class="join">انضم الآن</a>
         </p>
+        <div style="text-align: center; width: 80%; margin: 40px auto; margin-bottom: 0;" class="row" dir="ltr">
+            <div class="col-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="bi bi-pin-map-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8l3-4z"/>
+                    <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z"/>
+                  </svg>
+            </div>
+            <div class="col-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-calendar2-check" viewBox="0 0 16 16">
+                    <path d="M10.854 8.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 0 1 .708-.708L7.5 10.793l2.646-2.647a.5.5 0 0 1 .708 0z"/>
+                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5zM2 2a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H2z"/>
+                    <path d="M2.5 4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H3a.5.5 0 0 1-.5-.5V4z"/>
+                  </svg>
+            </div>
+            <div class="col-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-clock" viewBox="0 0 16 16">
+                    <path d="M8 3.5a.5.5 0 0 0-1 0V9a.5.5 0 0 0 .252.434l3.5 2a.5.5 0 0 0 .496-.868L8 8.71V3.5z"/>
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z"/>
+                  </svg>
+            </div>
+            <div style="margin-top: 5px;" class="col-4">
+                مسرح مبنى 24
+            </div>
+            <div style="margin-top: 5px;" class="col-4">
+                1443/1/22 2021/8/30
+            </div><div style="margin-top: 5px;" class="col-4">
+                الاثنين <br>
+                9 - 12 AM
+            </div>
+        </div>
+    </div>
+</div>
+<div id="time" dir="ltr">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-xs-12">
+                <p style="text-align: center;">:متبقي على الحدث </p>
+            </div>
+            <div class="col-md-6 col-xs-12">
+                <p id="countdown"></p>
+            </div>
+        </div>
     </div>
 </div>
 
+<div id="video">
+    <div class="container">
+        <h1 style="color: white; margin-bottom: 15px;">الفيديو التعريفي</h1>
+        <iframe width="100%" height="315" src="https://www.youtube.com/embed/KdftDhCQhPU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+</div>
+
+<div id="timeline">
+    <div class="container">
+        </div>
+    </div>
+</div>
+
+<script>
+    // Set the date we're counting down to
+    var countDownDate = new Date("August 30, 2021 09:00:00").getTime();
+    
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+    
+      // Get today's date and time
+      var now = new Date().getTime();
+        
+      // Find the distance between now and the count down date
+      var distance = countDownDate - now;
+        
+      // Time calculations for days, hours, minutes and seconds
+      var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      days = ('0' + days).slice(-2)  
+      hours = ('0' + hours).slice(-2)  
+      minutes = ('0' + minutes).slice(-2)  
+      seconds = ('0' + seconds).slice(-2)  
+      // Output the result in an element with id="demo"
+      document.getElementById("countdown").innerHTML = "<p class='big'> " + days + " : " + hours + " : " + minutes 
+        +" : " + seconds + "</p>";
+        document.getElementById("countdown").innerHTML += "<p class='text'> ثانية دقيقة ساعة يوم" 
+        
+      // If the count down is over, write some text 
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("countdown").innerHTML = "انتهى!";
+      }
+    }, 1000);
+    </script>
 {% endblock %}
