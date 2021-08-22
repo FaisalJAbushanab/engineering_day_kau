@@ -308,6 +308,6 @@ def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('401.html'), 401
 
-@app.route('/loaderio-7cb5eb28a33a0de0db94a487bda39100')
+@app.route('/loaderio-7cb5eb28a33a0de0db94a487bda39100/')
 def test():
     return render_template('loaderio-7cb5eb28a33a0de0db94a487bda39100.html')
