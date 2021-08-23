@@ -100,7 +100,7 @@ def register():
                 os.remove(path)
         token = s.dumps(created.email, salt='email-confirm')
 
-        msg = Message('بوابة الهندسة 21 | تفعيل حسابك',
+        msg = Message('تأكيد تسجيلك في بوابة الهندسة 21',
                   sender=('بوابة الهندسة 21 ', 'noreplay@7alaqh.com'), recipients=[created.email])
         msg.html = render_template('mail/confirm_email.html', token=token, user=created)
         
@@ -244,8 +244,8 @@ def info():
 
 def send_reset_email(user):
     token = user.get_reset_token()
-    msg = Message('بوابة الهندسة 21 | رابط إعادة تعين كلمة المرور',
-                  sender='noreplay@7alaqh.com', recipients=[user.email])
+    msg = Message('اعادة تعين كلمة المرور الخاصة بك',
+                  sender=('21 بوابة الهندسة', 'noreplay@7alaqh.com'), recipients=[user.email])
     msg.html = render_template('mail/forgot_password.html', token=token)
     
 # f'''<h2 style="text-align: center"> <img src="/app/static/images/logo.svg" width="200px" /> </h2> <br> <br> <p style="text-align: right;"> </b> مرحباً عزيزي,,,</b> </p> <br>
