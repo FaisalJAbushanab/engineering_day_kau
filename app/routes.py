@@ -102,16 +102,18 @@ def register():
 
         msg = Message('بوابة الهندسة 21 | تفعيل حسابك',
                   sender='noreplay@7alaqh.com', recipients=[created.email])
-        msg.html = f'''<h2 style="text-align: center"> <img src="/app/static/images/logo.svg" width="200px" /> </h2> <br> <br> <p style="text-align: right;"> </b> مرحباً عزيزي,,,</b> </p> <br>
-<p style="text-align: right;"> نشكرك على تسجيلك للحضور في بوابة الهندسة 21 لتتمكن لدخول إلى بطاقتك الإلكترونية، يتوجب عليك تفعيل حسابك من خلال الضغط على الزر أدناه </p>"
-<br> <p style="text-align: center;"> <a href="{url_for('confirm_email', token=token, _external=True)}" style="color: white; background-color: green; padding: 10px 20px;">تفعيل حسابي </a> </p>
-<br> <br>
-<p style="text-align: right;"> اذا كنت لا تستطيع الضغط على الزر أعلاه فالرجاء نسخ الرابط التالي ولصقه في متصفحك ليتم تفعيل حسابك </P>
-<a href="{url_for('confirm_email', token=token, _external=True)}"> {url_for('confirm_email', token=token, _external=True)} </a> 
-<br style="text-align: right;">
-<p style="text-align: right;"> للدعم والمساعدة الرجاء التواصل معنا عبر البريد الإلكتروني: support@kau-enggate21.com </p>
+        msg.html = render_template('mail/confirm_email.html', token=token, user=created)
+        
+# f'''<h2 style="text-align: center"> <img src="/app/static/images/logo.svg" width="200px" /> </h2> <br> <br> <p style="text-align: right;"> </b> مرحباً عزيزي,,,</b> </p> <br>
+# <p style="text-align: right;"> نشكرك على تسجيلك للحضور في بوابة الهندسة 21 لتتمكن لدخول إلى بطاقتك الإلكترونية، يتوجب عليك تفعيل حسابك من خلال الضغط على الزر أدناه </p>"
+# <br> <p style="text-align: center;"> <a href="{url_for('confirm_email', token=token, _external=True)}" style="color: white; background-color: green; padding: 10px 20px;">تفعيل حسابي </a> </p>
+# <br> <br>
+# <p style="text-align: right;"> اذا كنت لا تستطيع الضغط على الزر أعلاه فالرجاء نسخ الرابط التالي ولصقه في متصفحك ليتم تفعيل حسابك </P>
+# <a href="{url_for('confirm_email', token=token, _external=True)}"> {url_for('confirm_email', token=token, _external=True)} </a> 
+# <br style="text-align: right;">
+# <p style="text-align: right;"> للدعم والمساعدة الرجاء التواصل معنا عبر البريد الإلكتروني: support@kau-enggate21.com </p>
 
-'''
+# '''
 #     msg.body = f'''لإعاادة تعين كلمة المرور الخاصة بك، الرجاء النقر على الرابط أو لصقه في المتصفح:
 # {url_for('reset_token', token=token, _external=True)}
 
