@@ -101,7 +101,7 @@ def register():
         token = s.dumps(created.email, salt='email-confirm')
 
         msg = Message('بوابة الهندسة 21 | تفعيل حسابك',
-                  sender='noreplay@7alaqh.com', recipients=[created.email])
+                  sender=('بوابة الهندسة 21 ', 'noreplay@7alaqh.com'), recipients=[created.email])
         msg.html = render_template('mail/confirm_email.html', token=token, user=created)
         
 # f'''<h2 style="text-align: center"> <img src="/app/static/images/logo.svg" width="200px" /> </h2> <br> <br> <p style="text-align: right;"> </b> مرحباً عزيزي,,,</b> </p> <br>
@@ -246,17 +246,19 @@ def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('بوابة الهندسة 21 | رابط إعادة تعين كلمة المرور',
                   sender='noreplay@7alaqh.com', recipients=[user.email])
-    msg.html = f'''<h2 style="text-align: center"> <img src="/app/static/images/logo.svg" width="200px" /> </h2> <br> <br> <p style="text-align: right;"> </b> مرحباً عزيزي,,,</b> </p> <br>
-<p style="text-align: right;"> لقد طلبت اعادة تعين كلمة المرور الخاصة بحسابك في منصة بوابة الهندسة 21" لإعادة تعين كلمة مرور جديدة الرجاء الضغط على زر "إعادة تعين كلمة مرور جديدة </p>"
-<br> <p style="text-align: center;"> <a href="{url_for('reset_token', token=token, _external=True)}" style="color: white; background-color: green; padding: 10px 20px;">إعادة تعين كلمة المرور </a> </p>
-<br> <br>
-<p style="text-align: right;"> اذا كنت لا تستطيع الضغط على الزر أعلاه فالرجاء نسخ الرابط التالي ولصقه في متصفحك ليتم إعادة تعين كلمة المرور </P>
-<a href="{url_for('reset_token', token=token, _external=True)}"> {url_for('reset_token', token=token, _external=True)} </a> 
-<br style="text-align: right;">
-<b style="text-align: right;"> ملاحظة: إذا لت تطلب إعادة تعين كلمة المرور الخاصة بحسابك في منصة بوابة الهندسة 21 الرجاء تجاهل هذه الرسالة ولن يتم تغير أي شيء </b>
-<p style="text-align: right;"> للدعم والمساعدة الرجاء التواصل معنا عبر البريد الإلكتروني: support@kau-enggate22.com </p>
+    msg.html = render_template('mail/forgot_password.html', token=token)
+    
+# f'''<h2 style="text-align: center"> <img src="/app/static/images/logo.svg" width="200px" /> </h2> <br> <br> <p style="text-align: right;"> </b> مرحباً عزيزي,,,</b> </p> <br>
+# <p style="text-align: right;"> لقد طلبت اعادة تعين كلمة المرور الخاصة بحسابك في منصة بوابة الهندسة 21" لإعادة تعين كلمة مرور جديدة الرجاء الضغط على زر "إعادة تعين كلمة مرور جديدة </p>"
+# <br> <p style="text-align: center;"> <a href="{url_for('reset_token', token=token, _external=True)}" style="color: white; background-color: green; padding: 10px 20px;">إعادة تعين كلمة المرور </a> </p>
+# <br> <br>
+# <p style="text-align: right;"> اذا كنت لا تستطيع الضغط على الزر أعلاه فالرجاء نسخ الرابط التالي ولصقه في متصفحك ليتم إعادة تعين كلمة المرور </P>
+# <a href="{url_for('reset_token', token=token, _external=True)}"> {url_for('reset_token', token=token, _external=True)} </a> 
+# <br style="text-align: right;">
+# <b style="text-align: right;"> ملاحظة: إذا لت تطلب إعادة تعين كلمة المرور الخاصة بحسابك في منصة بوابة الهندسة 21 الرجاء تجاهل هذه الرسالة ولن يتم تغير أي شيء </b>
+# <p style="text-align: right;"> للدعم والمساعدة الرجاء التواصل معنا عبر البريد الإلكتروني: support@kau-enggate22.com </p>
 
-'''
+# '''
 #     msg.body = f'''لإعاادة تعين كلمة المرور الخاصة بك، الرجاء النقر على الرابط أو لصقه في المتصفح:
 # {url_for('reset_token', token=token, _external=True)}
 
