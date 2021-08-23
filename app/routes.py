@@ -101,7 +101,7 @@ def register():
         token = s.dumps(created.email, salt='email-confirm')
 
         msg = Message('تأكيد تسجيلك في بوابة الهندسة 21',
-                  sender=('بوابة الهندسة 21 ', 'noreplay@7alaqh.com'), recipients=[created.email])
+                  sender=('21 بوابة الهندسة', 'noreplay@7alaqh.com'), recipients=[created.email])
         msg.html = render_template('mail/confirm_email.html', token=token, user=created)
         
 # f'''<h2 style="text-align: center"> <img src="/app/static/images/logo.svg" width="200px" /> </h2> <br> <br> <p style="text-align: right;"> </b> مرحباً عزيزي,,,</b> </p> <br>
