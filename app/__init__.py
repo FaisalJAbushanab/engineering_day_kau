@@ -8,7 +8,7 @@ from flask_marshmallow import Marshmallow
 
 app = Flask(__name__)
 
-ENV = 'prod'
+ENV = 'حقخي'
 if ENV == 'dev':
     app.debug = True
     app.config['SECRET_KEY'] = 'c9aafc85052059bcf8c42237bf291ae9295a294dcc707384b47d94b340bae26a'
@@ -30,7 +30,7 @@ else:
     app.config['MAIL_USE_TLS'] = True
     
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['MAIL_USERNAME'] = 'postmaster@7alaqh.com'
+app.config['MAIL_USERNAME'] = 'postmaster@mg.7alaqh.com'
 app.config['MAIL_PASSWORD'] = '50ed0c16069d4ecbbcc37c4f3e02266e-fb87af35-9e6e3ea4'
 db = SQLAlchemy(app)
 ma = Marshmallow(app)

@@ -221,7 +221,8 @@ def emailing():
     form = BulkEmailForm()
     if request.method == 'POST':
         if form.validate_on_submit():
-            sender = form.sender.data + '@7alaqh.com'
+            # sender = form.sender.data + '@mg.7alaqh.com'
+            sender = 'postmaster@mg.7alaqh.com'
             if form.recipients.data == 'all':
                 get_users = User.query.filter_by(status='activated').all()
                 emails = []
