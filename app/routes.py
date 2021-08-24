@@ -230,7 +230,7 @@ def emailing():
                 if len(emails) < 1:
                     flash('مشكلة في الارسال', 'danger')
                     return redirect(url_for('emailing'))
-                msg = Message(form.data.subject,
+                msg = Message(form.subject.data,
                   sender=('بوابة الهندسة 21', sender), recipients=emails)
                 msg.html = request.form.get('editordata')
                 mail.send(msg)
