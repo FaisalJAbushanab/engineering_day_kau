@@ -2,6 +2,7 @@ from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import validators
 from wtforms import StringField, PasswordField, RadioField, SubmitField, validators
 from wtforms.fields.core import SelectField
+from wtforms.fields.simple import TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import User
 
@@ -69,3 +70,22 @@ class ResetPasswordForm(FlaskForm):
     confirm_password = PasswordField('تأكيد كلمة المرور الجديدة', 
                                     validators=[DataRequired(), EqualTo('password')])
     submit = SubmitField('اعادة تعين كلمة المرور')
+
+class BulkEmailForm(FlaskForm):
+    sender = StringField('المرسل', validators=[DataRequired(), Length(min=4, max=23)])
+    recipients = SelectField('المستلمون', choices=[('null', '...اختر'), ('all', 'الجميع'), ('select', 'شخص محدد'), ('Admin', 'الادارة'), ('Mod', 'فريق التنظيم'), ('Guest', 'حضور')])
+    subject = StringField('العنوان', validators=[DataRequired(), Length(min=4, max=155)])
+    submit = SubmitField('ارسال')
+    def validate_recipients(self, recipients):
+        data = ['null', 'all', 'select', 'Admin', 'Mod', 'Guest']
+        if recipients.data == 'null':
+            raise ValidationError('يجب اختيار مستلم')
+        if recipients.data not in data:
+            raise ValidationError('قيمة غير صحيحة')
+
+    def validate_sender(self, sender):
+        check = sender.data.find("@")
+        if check != -1:
+            raise ValidationError('@ اسم المرسل يجب ان لا يحتوى على الرمز')
+        if not sender.data.isascii():
+            raise ValidationError('اسم المرسل يجب ان يكون بالحروف الانجليزية فقط')

@@ -8,7 +8,8 @@ from pyasn1.type.univ import Null
 from sqlalchemy.sql.expression import true
 from app.models import User, UserSchema
 from app.forms import (RegistrationForm, LoginForm, UpdateInfoForm,
-                        UpdatePermissionsForm, RequestResetForm, ResetPasswordForm)
+                        UpdatePermissionsForm, RequestResetForm,
+                        ResetPasswordForm, BulkEmailForm)
 from app import app, db, bcrypt, mail
 from flask_login import login_user, current_user, logout_user
 import firebase_admin
@@ -18,7 +19,7 @@ import random, os
 import string
 from flask_mail import Message
 import qrcode
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 from itsdangerous import URLSafeTimedSerializer
 
 firebaseConfig = {
@@ -211,6 +212,89 @@ def home():
     qrcode_link = getURL(path)
     return render_template('auth/home.html', user = current_user, qr = qrcode_link)
 
+@app.route('/bulk-messages', methods=['GET', 'POST'])
+@login_required
+def emailing():
+    if current_user.roles != 'Admin':
+        abort(401)
+    page = 'emailing'
+    form = BulkEmailForm()
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            sender = form.sender.data + '@7alaqh.com'
+            if form.recipients.data == 'all':
+                get_users = User.query.filter_by(status='activated').all()
+                emails = []
+                for user in get_users:
+                    emails.append(user.email)
+                if len(emails) < 1:
+                    flash('مشكلة في الارسال', 'danger')
+                    return redirect(url_for('emailing'))
+                msg = Message(form.data.subject,
+                  sender=('بوابة الهندسة 21', sender), recipients=emails)
+                msg.html = request.form.get('editordata')
+                mail.send(msg)
+                flash('تم الارسال بنجاح', 'success')
+                return redirect(url_for('emailing'))
+            elif form.recipients.data == 'select':
+                get_user = User.query.filter(and_(User.status=='activated', User.email==request.form.get('peremail'))).first()
+                if not get_user:
+                    flash('البريد الإلكتروني غير متوفر', 'danger')
+                    return redirect(url_for('emailing'))
+                msg = Message(form.subject.data,
+                  sender=('بوابة الهندسة 21', sender), recipients=[get_user.email])
+                msg.html = f'''{ request.form.get('editordata') }'''
+                mail.send(msg)
+                flash('تم الارسال بنجاح', 'success')
+                return redirect(url_for('emailing'))
+            elif form.recipients.data == 'Guest':
+                Guests = User.query.filter(and_(User.status=='activated', User.roles=='Guest')).all()
+                emails = []
+                for Guest in Guests:
+                    emails.append(Guest.email)
+                if len(emails) < 1:
+                    flash('مشكلة في الارسال', 'danger')
+                    return redirect(url_for('emailing'))
+                msg = Message(form.subject.data,
+                  sender=('بوابة الهندسة 21', sender), recipients=emails)
+                msg.html = request.form.get('editordata')
+                mail.send(msg)
+                flash('تم الارسال بنجاح', 'success')
+                return redirect(url_for('emailing'))
+            elif form.recipients.data == "Mod":
+                Mods = User.query.filter(and_(User.status=='activated', User.roles=='Mod')).all()
+                emails = []
+                for Mod in Mods:
+                    emails.append(Mod.email)
+                if len(emails) < 1:
+                    flash('مشكلة في الارسال', 'danger')
+                    return redirect(url_for('emailing'))
+                msg = Message(form.subject.data,
+                  sender=('بوابة الهندسة 21', sender), recipients=emails)
+                msg.html = request.form.get('editordata')
+                mail.send(msg)
+                flash('تم الارسال بنجاح', 'success')
+                return redirect(url_for('emailing'))
+            elif form.recipients.data == "Admin":
+                Admins = User.query.filter(and_(User.status=='activated', User.roles=='Admin')).all()
+                emails = []
+                for Admin in Admins:
+                    emails.append(Admin.email)
+                if len(emails) < 1:
+                    flash('مشكلة في الارسال', 'danger')
+                    return redirect(url_for('emailing'))
+                msg = Message(form.subject.data,
+                  sender=('بوابة الهندسة 21', sender), recipients=emails)
+                msg.html = request.form.get('editordata')
+                mail.send(msg)
+                flash('تم الارسال بنجاح', 'success')
+                redirect(url_for('emailing'))
+            else:
+                flash('مشكلة في الارسال', 'danger')
+                return redirect(url_for('emailing'))
+                
+
+    return render_template('admin/messaging.html', page=page, form=form)
 @app.route('/qrcode-scan')
 @login_required
 def qrscan():

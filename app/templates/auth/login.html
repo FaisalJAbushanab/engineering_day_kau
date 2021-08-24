@@ -74,7 +74,7 @@
             <div class="mb-3">
           {{ form.email.label(class="form-label") }}
           {% if form.email.errors %}
-          {{ form.email(placeholder="example@email.com", class="is-invaild form-control") }}
+          {{ form.email(placeholder="example@email.com", class="is-invalid form-control") }}
           <div class="invalid-feedback">
             {% for error in form.email.errors %}
             <span>{{ error }}</span>
@@ -89,7 +89,7 @@
           {{ form.password.label(class="form-label") }}
           {% if form.password.errors %}
           <div class="invalid-feedback">
-            {{ form.password(placeholder="password", class="is-invaild form-control") }}
+            {{ form.password(placeholder="password", class="is-invalid form-control") }}
             {% for error in form.password.errors %}
             <span>{{ error }}</span>
             {% endfor %}
