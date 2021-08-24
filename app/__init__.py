@@ -30,8 +30,8 @@ else:
     app.config['MAIL_USE_TLS'] = True
     
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['MAIL_USERNAME'] = '00mrxgames00@gmail.com'
-app.config['MAIL_PASSWORD'] = 'qsgoyqjbbrddnqbx'
+app.config['MAIL_USERNAME'] = 'kau.enggate21@gmail.com'
+app.config['MAIL_PASSWORD'] = '@Gg0533368202'
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
 bcrypt = Bcrypt(app)
