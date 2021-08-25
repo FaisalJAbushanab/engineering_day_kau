@@ -12,6 +12,7 @@ $(document).ready(function() {
 
 $("#pick").click(function() {
   // Get a random name, the winner
+      nameArray= shuffle(nameArray);
   var winner = nameArray[Math.floor(Math.random()*nameArray.length)];
   
   winner = "🎉" + " " + winner + " " + "🎉";
