@@ -21,6 +21,7 @@ from flask_mail import Message
 import qrcode
 from sqlalchemy import or_, and_
 from itsdangerous import URLSafeTimedSerializer
+import requests
 
 firebaseConfig = {
     "apiKey": "AIzaSyDiXLqriZJblxEBr-acp1L_sG3qR82U434",
@@ -36,6 +37,15 @@ cred = credentials.Certificate("app/Key.json")
 admin = firebase_admin.initialize_app(cred, firebaseConfig)
 
 s = URLSafeTimedSerializer(app.config['SECRET_KEY'], )
+
+def send_email(sender, emails, subject, content):
+    requests.post(
+        "https://api.mailgun.net/v3/7alaqh.com/messages",
+        auth=("api", "47ae4bd7f8f5e76c95294d5aa43abcf8-b892f62e-cd14c5de"),
+        data={"from": sender,
+              "to": emails,
+              "subject": subject,
+              "html": content})
 def getURL(path):
     
     # firebase = pyrebase.initialize_app(firebaseConfig)
@@ -79,6 +89,16 @@ def register():
             .choice(string.ascii_uppercase + string.digits) for _ in range(20))
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         small_email = form.email.data.lower()
+        isUser = User.query.filter(and_(User.email==small_email, User.status=='pending'))
+        if isUser:
+            token = s.dumps(isUser.email, salt='email-confirm')
+            msg = Message('تأكيد تسجيلك',
+                  sender=('21 بوابة الهندسة', 'noreplay@7alaqh.com'), recipients=[isUser.email])
+            msg.html = render_template('mail/confirm_email.html', token=token, user=isUser)
+            mail.send(msg)
+
+            flash('تم ارسال رسالة إلى بريدك '+ isUser.email + ' تحتوي على معلومات تفعيل حسابك لتتمكن من الوصول لبطاقتك الإلكترونية. في حال لم يصلك البريد تأكد من سلة المهملات spam ', 'warning')
+            return redirect(url_for('login'))
         user = User(email=small_email, password=hashed_password, full_name=form.fullname.data, unId=form.unid.data, qrcode = qr_code, field=form.field.data)
         db.session.add(user)
         db.session.commit()
@@ -222,7 +242,7 @@ def emailing():
     if request.method == 'POST':
         if form.validate_on_submit():
             # sender = form.sender.data + '@mg.7alaqh.com'
-            sender = 'postmaster@mg.7alaqh.com'
+            sender = ' <'+ form.sender.data +'@7alaqh.com>'
             if form.recipients.data == 'all':
                 get_users = User.query.filter_by(status='activated').all()
                 emails = []
@@ -231,10 +251,11 @@ def emailing():
                 if len(emails) < 1:
                     flash('مشكلة في الارسال', 'danger')
                     return redirect(url_for('emailing'))
-                msg = Message(form.subject.data,
-                  sender=('بوابة الهندسة 21', sender), recipients=emails)
-                msg.html = request.form.get('editordata')
-                mail.send(msg)
+                # msg = Message(form.subject.data,
+                #   sender=('بوابة الهندسة 21', sender), recipients=emails)
+                # msg.html = request.form.get('editordata')
+                # mail.send(msg)
+                send_email(sender=('بوابة الهندسة 21'+sender), emails=emails, subject=form.subject.data, content=request.form.get('editordata'))
                 flash('تم الارسال بنجاح', 'success')
                 return redirect(url_for('emailing'))
             elif form.recipients.data == 'select':
@@ -242,10 +263,11 @@ def emailing():
                 if not get_user:
                     flash('البريد الإلكتروني غير متوفر', 'danger')
                     return redirect(url_for('emailing'))
-                msg = Message(form.subject.data,
-                  sender=('بوابة الهندسة 21', sender), recipients=[get_user.email])
-                msg.html = f'''{ request.form.get('editordata') }'''
-                mail.send(msg)
+                # msg = Message(form.subject.data,
+                #   sender=('بوابة الهندسة 21', sender), recipients=[get_user.email])
+                # msg.html = f'''{ request.form.get('editordata') }'''
+                # mail.send(msg)
+                send_email(sender=('بوابة الهندسة 21'+sender), emails=get_user.email, subject=form.subject.data, content=request.form.get('editordata'))
                 flash('تم الارسال بنجاح', 'success')
                 return redirect(url_for('emailing'))
             elif form.recipients.data == 'Guest':
@@ -256,10 +278,11 @@ def emailing():
                 if len(emails) < 1:
                     flash('مشكلة في الارسال', 'danger')
                     return redirect(url_for('emailing'))
-                msg = Message(form.subject.data,
-                  sender=('بوابة الهندسة 21', sender), recipients=emails)
-                msg.html = request.form.get('editordata')
-                mail.send(msg)
+                # msg = Message(form.subject.data,
+                #   sender=('بوابة الهندسة 21', sender), recipients=emails)
+                # msg.html = request.form.get('editordata')
+                # mail.send(msg)
+                send_email(sender=('بوابة الهندسة 21'+sender), emails=emails, subject=form.subject.data, content=request.form.get('editordata'))
                 flash('تم الارسال بنجاح', 'success')
                 return redirect(url_for('emailing'))
             elif form.recipients.data == "Mod":
@@ -270,10 +293,7 @@ def emailing():
                 if len(emails) < 1:
                     flash('مشكلة في الارسال', 'danger')
                     return redirect(url_for('emailing'))
-                msg = Message(form.subject.data,
-                  sender=('بوابة الهندسة 21', sender), recipients=emails)
-                msg.html = request.form.get('editordata')
-                mail.send(msg)
+                send_email(sender=('بوابة الهندسة 21'+sender), emails=emails, subject=form.subject.data, content=request.form.get('editordata'))
                 flash('تم الارسال بنجاح', 'success')
                 return redirect(url_for('emailing'))
             elif form.recipients.data == "Admin":
@@ -284,10 +304,7 @@ def emailing():
                 if len(emails) < 1:
                     flash('مشكلة في الارسال', 'danger')
                     return redirect(url_for('emailing'))
-                msg = Message(form.subject.data,
-                  sender=('بوابة الهندسة 21', sender), recipients=emails)
-                msg.html = request.form.get('editordata')
-                mail.send(msg)
+                send_email(sender=('بوابة الهندسة 21'+sender), emails=emails, subject=form.subject.data, content=request.form.get('editordata'))
                 flash('تم الارسال بنجاح', 'success')
                 redirect(url_for('emailing'))
             else:
@@ -310,6 +327,7 @@ def info():
         form.fullname.data = user.full_name
         form.field.data = user.field
     if request.method == 'POST':
+        if form.validate_on_submit():
            count = 0
            if bcrypt.check_password_hash(user.password, form.password.data):
                if user.full_name != form.fullname.data:
@@ -331,7 +349,7 @@ def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('اعادة تعين كلمة المرور الخاصة بك',
                   sender=('21 بوابة الهندسة', 'noreplay@7alaqh.com'), recipients=[user.email])
-    msg.html = render_template('mail/forgot_password.html', token=token)
+    msg.html = render_template('mail/forgot_password.html', token=token, user=user)
     
 # f'''<h2 style="text-align: center"> <img src="/app/static/images/logo.svg" width="200px" /> </h2> <br> <br> <p style="text-align: right;"> </b> مرحباً عزيزي,,,</b> </p> <br>
 # <p style="text-align: right;"> لقد طلبت اعادة تعين كلمة المرور الخاصة بحسابك في منصة بوابة الهندسة 21" لإعادة تعين كلمة مرور جديدة الرجاء الضغط على زر "إعادة تعين كلمة مرور جديدة </p>"
@@ -379,6 +397,14 @@ def reset_token(token):
         return redirect(url_for('login'))
     return render_template('auth/reset_token.html', form=form)
 
+@app.route('/draw')
+@login_required
+def draw():
+    users = User.query.filter(and_(User.status=='activated', User.roles=='Guest')).all()
+    # user_schema = UserSchema()
+    # users = user_schema.jsonify(users)
+    return render_template('admin/draw.html', page='draw', users=users)
+
 
 @app.route('/checkout/user/<int:user_id>')
 @login_required
@@ -386,6 +412,13 @@ def checkout(user_id):
     user = User.query.get_or_404(user_id)
     user_schema = UserSchema()
     return user_schema.jsonify(user)
+
+@app.route('/get_users')
+@login_required
+def winners():
+    users = User.query.filter(and_(User.status=='activated', User.roles=='Guest')).all()
+    user_schema = UserSchema(many=True)
+    return user_schema.jsonify(users)
 
 @app.errorhandler(404)
 def page_not_found(e):

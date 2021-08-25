@@ -5,6 +5,7 @@ from wtforms.fields.core import SelectField
 from wtforms.fields.simple import TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import User
+from sqlalchemy import or_, and_
 
 class RegistrationForm(FlaskForm):
     fullname = StringField('الاسم الثلاثي',
@@ -19,7 +20,7 @@ class RegistrationForm(FlaskForm):
     submit = SubmitField('تسجيل')
 
     def validate_email(self, email):
-        user = User.query.filter_by(email=email.data).first()
+        user = User.query.filter(and_(User.email==email.data, User.status=='activated')).first()
         if user:
             raise ValidationError('هذا البريد مستخدم من قبل، اذا كنت قد نسيت كلمة المرور الرجاء الضغط على نسية كلمة المرور لتعين كلمة مرور جديدة')
 
