@@ -410,13 +410,14 @@ def draw():
 
 @app.route('/resources/<page>')
 def resources(page):
+    page=page
     title = ''
     check = False
     if page == 'engineering_fields':
         title = 'التخصصات الهندسية'
         check = True
     if check:
-        return render_template('resources.html', title=title, page='resources',sub=page)
+        return render_template('resources.html', title=title, page='resources', sub=page)
     else:
         abort(404)
 
