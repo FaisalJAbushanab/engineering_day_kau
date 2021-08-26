@@ -4,24 +4,47 @@ $(document).ready(function() {
     fetch('/get_users').then(res => res.json())
       .then(data => { 
         for(var x=0; x < data.length; x++){
-            nameArray.push(data[x].full_name);
+            nameArray.push(data[x]);
         }
       })
       nameArray= shuffle(nameArray);
-})
 
-$("#pick").click(function() {
+})
+function startRepeating(){
+  setInterval("winner()", 1000);
+}
+function stopFunction(){
+  clearInterval(myVar); // stop the timer
+}
+$("#pick").click(function winner() {
   // Get a random name, the winner
       nameArray= shuffle(nameArray);
   var winner = nameArray[Math.floor(Math.random()*nameArray.length)];
   
-  winner = "🎉" + " " + winner + " " + "🎉";
+  winner = "🎉" + " " + winner.full_name + " " + "🎉";
   
   // Display winner
   $("#world").addClass("open");
   $("#winner").addClass("open");
   $("#close").addClass("open");
   $("#winner").text(winner);
+  var intervalId = setInterval(function (){
+    var winner = nameArray[Math.floor(Math.random()*nameArray.length)];
+    winner =  winner ;
+    $("#winner").text(winner.full_name);
+    
+   }, 50);
+   setTimeout(function(){
+    clearInterval(intervalId);
+    winner = nameArray[Math.floor(Math.random()*nameArray.length)];
+    id = winner.id;
+    winner = "🎉" + " " + winner.full_name + " " + "🎉";
+    $("#winner").text(winner);
+    if($('.item-winner').hasClass(id) == false){
+      $(".menu1").append('<li class="item-winner '+ id +'">'+ winner.replace(/🎉/g, '') +'</li>')
+    }
+},5000) // stop it after 10seconds
+  
 });
   
 $("#close").click(function() {

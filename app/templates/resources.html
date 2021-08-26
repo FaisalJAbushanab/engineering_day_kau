@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block title %} {{ sdf }} {% endblock %}
+{% block content %}
+
+<style>
+    h2{
+        color: white;
+    }
+    body{
+        font-family: Tajawal-medium;
+    }
+    #background{
+        background-image: url('/static/images/engineering_fields.jpg');
+        background-position: bottom;
+        background-repeat: no-repeat;
+        background-size: cover;
+        width: 100%;
+        height: 200px;
+        position: relative;
+        overflow: hidden;
+    }
+    .overlay{
+        background-color: rgba(0, 0, 0, 0.8);
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        overflow: hidden;
+    }
+    #background .container{
+        font-family: 'Tajawalbold' !important;
+        color: white;
+        position: relative;
+        text-align: center;
+        margin-top: 100px;
+
+    }
+</style>
+<input id="titlet" type="hidden" value="{{ title }}">
+
+{% if sub == 'engineering_fields' %}
+    <div id="background">
+        <div class="overlay"></div>
+        <div class="container">
+            <h2>التخصصات الهندسية</h2>
+        </div>
+    </div>
+    <div id="content">
+        <div style="padding: 20px; margin: 30px auto; background-color: white; border-radius: 4px;" class="container">
+            <h3 style="margin-top: 30px;">عن الفقرة:</h3>
+            <p style="text-align: justify;">
+                أحد فقرات ملتقى بوابة الهندسة 2021 والتي يقدمها نخبة من الطلاب المتميزين من مختلف تخصصات الهندسة, يقدمون فيها تعريف موجز عن التخصصات الهندسية ونصائح ثمينة للطلاب المستجدين في كلية الهندسة تساعدهم في اختيار تخصصهم المناسب بمشيئة الله.
+            </p>
+            <h3 style="margin-top: 30px;">المقدمون: </h3>
+            <p>
+                <ul>
+                    <li>
+                        مشعل الشهري - هندسة الطيران والفضاء
+                    </li>
+                    <li>
+                        منصور ابا العلا - الهندسة الكيميائية
+                    </li>
+                    <li>
+                        صهيب درويش - الهندسة الصناعية
+                    </li>
+                    <li>
+                        عبدالرحمن الخطيب - الهندسة الكهربائية وهندسة الحاسبات
+                    </li>
+                </ul>
+            </p>
+        <h3 style="margin-top: 30px;">ملفات مهمة: </h3>
+        <p>
+            <a href="https://drive.google.com/file/d/1DKVGljk0MyZkm6yeEkKy_F5qZK7JPGG9/preview">العرض التقديمي (pdf)</a>
+        </p>
+        <div class="row">
+            <iframe src="https://drive.google.com/file/d/1DKVGljk0MyZkm6yeEkKy_F5qZK7JPGG9/preview" width="640" height="250" allow="autoplay"></iframe>
+        </div>
+        </div>
+    </div>
+{% endif %}
+<script>
+    $(document).ready(function(){
+        var title = $('#titlet').val()
+        document.title = title;
+    })
+</script>
+{% endblock %}

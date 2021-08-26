@@ -9,7 +9,7 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
         <link rel="stylesheet" href="../static/css/style.css">
 
-        {% if page and page in ['emailing', 'draw'] %}
+        {% if page and page in ['emailing', 'draw', 'resources'] %}
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
@@ -53,6 +53,33 @@
           .invalid-feedback{
             display: block;
           }
+          @media (max-width: 500px) {
+          .dropdown-menu{
+            background-color: transparent !important;
+            border: 0 !important;
+          }
+          .line{
+            padding-right: 30px;
+          }
+        }
+          .dropdown-item{
+            text-align: right;
+          }
+          .item-active{
+            color: green !important;
+          }
+          .btn{
+            padding: 2px 20px;
+            border: 1px solid #3333;
+          }
+          .dropdown-toggle[aria-expanded="true"]:after {
+          transform: rotate(180deg); 
+          }
+          /*for animation*/ 
+          .dropdown-toggle:after { 
+
+          transition: ease-in-out 0.1s; 
+}
     </style>
     <body>
        {% if page != 'draw' %}
@@ -69,7 +96,7 @@
           </button>
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mb-2 mb-lg-0">
+            <ul class="navbar-nav mb-2 mb-lg-0" style="padding-right: 5px ;">
               {% if current_user.is_authenticated %}
                 <!-- put code for username and avatar-->
                 <li class="nav-item">
@@ -98,19 +125,18 @@
               <li class="nav-item">
                 <a class="nav-link  {{'item-active' if page and page == 'index' }}" href="{{  url_for('index')  }}">الرئيسية</a>
               </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  فقرات الملتقى
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item {{'item-active' if page and page == 'index' }}" href="{{  url_for('index')  }}">الرؤية والهندسة</a></li>
+                  <li><a class="dropdown-item {{'item-active' if page and page == 'index' }}" href="{{  url_for('index')  }}">مصادر التعلم</a></li>
+                  <li><a class="dropdown-item {{'item-active' if page and page == 'index' }}" href="{{  url_for('resources', page='engineering_fields')  }}">التخصصات الهندسية</a></li>
+                  <li><a class="dropdown-item {{'item-active' if page and page == 'index' }}" href="{{  url_for('index')  }}">رحلة الطالب</a></li>
+                </ul>
+              </li>
 
-              <li class="nav-item">
-                <a class="nav-link  {{'item-active' if page and page == 'indexخg' }}" href="{{  url_for('index')  }}">الرؤية والهندسة</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link  {{'item-active' if page and page == 'indexخg' }}" href="{{  url_for('index')  }}">مصادرالتعلم</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link  {{'item-active' if page and page == 'indexخg' }}" href="{{  url_for('index')  }}">التخصصات الهندسية</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link  {{'item-active' if page and page == 'indexخg' }}" href="{{  url_for('index')  }}">رحلة الطالب</a>
-              </li> 
     
               <!-- <li class="nav-item">
                 <a class="nav-link {{'item-active' if page and page == 'contact' }}" href="/contact-us">عن بوابة الهندسة</a>

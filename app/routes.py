@@ -89,7 +89,7 @@ def register():
             .choice(string.ascii_uppercase + string.digits) for _ in range(20))
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         small_email = form.email.data.lower()
-        isUser = User.query.filter(and_(User.email==small_email, User.status=='pending'))
+        isUser = User.query.filter(and_(User.email==small_email, User.status=='pending')).first()
         if isUser:
             token = s.dumps(isUser.email, salt='email-confirm')
             msg = Message('تأكيد تسجيلك',
@@ -242,7 +242,7 @@ def emailing():
     if request.method == 'POST':
         if form.validate_on_submit():
             # sender = form.sender.data + '@mg.7alaqh.com'
-            sender = ' <'+ form.sender.data +'@7alaqh.com>'
+            sender = form.sender.data+'@gmail.com'
             if form.recipients.data == 'all':
                 get_users = User.query.filter_by(status='activated').all()
                 emails = []
@@ -251,11 +251,10 @@ def emailing():
                 if len(emails) < 1:
                     flash('مشكلة في الارسال', 'danger')
                     return redirect(url_for('emailing'))
-                # msg = Message(form.subject.data,
-                #   sender=('بوابة الهندسة 21', sender), recipients=emails)
-                # msg.html = request.form.get('editordata')
-                # mail.send(msg)
-                send_email(sender=('بوابة الهندسة 21'+sender), emails=emails, subject=form.subject.data, content=request.form.get('editordata'))
+                msg = Message(form.subject.data,
+                  sender=('بوابة الهندسة 21', sender), recipients=emails)
+                msg.html = request.form.get('editordata')
+                mail.send(msg)
                 flash('تم الارسال بنجاح', 'success')
                 return redirect(url_for('emailing'))
             elif form.recipients.data == 'select':
@@ -263,11 +262,10 @@ def emailing():
                 if not get_user:
                     flash('البريد الإلكتروني غير متوفر', 'danger')
                     return redirect(url_for('emailing'))
-                # msg = Message(form.subject.data,
-                #   sender=('بوابة الهندسة 21', sender), recipients=[get_user.email])
-                # msg.html = f'''{ request.form.get('editordata') }'''
-                # mail.send(msg)
-                send_email(sender=('بوابة الهندسة 21'+sender), emails=get_user.email, subject=form.subject.data, content=request.form.get('editordata'))
+                msg = Message(form.subject.data,
+                  sender=sender, recipients=[get_user.email])
+                msg.html = f'''{ request.form.get('editordata') }'''
+                mail.send(msg)
                 flash('تم الارسال بنجاح', 'success')
                 return redirect(url_for('emailing'))
             elif form.recipients.data == 'Guest':
@@ -278,11 +276,10 @@ def emailing():
                 if len(emails) < 1:
                     flash('مشكلة في الارسال', 'danger')
                     return redirect(url_for('emailing'))
-                # msg = Message(form.subject.data,
-                #   sender=('بوابة الهندسة 21', sender), recipients=emails)
-                # msg.html = request.form.get('editordata')
-                # mail.send(msg)
-                send_email(sender=('بوابة الهندسة 21'+sender), emails=emails, subject=form.subject.data, content=request.form.get('editordata'))
+                msg = Message(form.subject.data,
+                  sender=sender, recipients=emails)
+                msg.html = request.form.get('editordata')
+                mail.send(msg)
                 flash('تم الارسال بنجاح', 'success')
                 return redirect(url_for('emailing'))
             elif form.recipients.data == "Mod":
@@ -293,7 +290,10 @@ def emailing():
                 if len(emails) < 1:
                     flash('مشكلة في الارسال', 'danger')
                     return redirect(url_for('emailing'))
-                send_email(sender=('بوابة الهندسة 21'+sender), emails=emails, subject=form.subject.data, content=request.form.get('editordata'))
+                msg = Message(form.subject.data,
+                  sender=sender, recipients=emails)
+                msg.html = request.form.get('editordata')
+                mail.send(msg)
                 flash('تم الارسال بنجاح', 'success')
                 return redirect(url_for('emailing'))
             elif form.recipients.data == "Admin":
@@ -304,7 +304,10 @@ def emailing():
                 if len(emails) < 1:
                     flash('مشكلة في الارسال', 'danger')
                     return redirect(url_for('emailing'))
-                send_email(sender=('بوابة الهندسة 21'+sender), emails=emails, subject=form.subject.data, content=request.form.get('editordata'))
+                msg = Message(form.subject.data,
+                  sender=sender, recipients=emails)
+                msg.html = request.form.get('editordata')
+                mail.send(msg)
                 flash('تم الارسال بنجاح', 'success')
                 redirect(url_for('emailing'))
             else:
@@ -405,6 +408,17 @@ def draw():
     # users = user_schema.jsonify(users)
     return render_template('admin/draw.html', page='draw', users=users)
 
+@app.route('/resources/<page>')
+def resources(page):
+    title = ''
+    check = False
+    if page == 'engineering_fields':
+        title = 'التخصصات الهندسية'
+        check = True
+    if check:
+        return render_template('resources.html', title=title, page='resources',sub=page)
+    else:
+        abort(404)
 
 @app.route('/checkout/user/<int:user_id>')
 @login_required
