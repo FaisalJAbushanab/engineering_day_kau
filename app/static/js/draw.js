@@ -16,6 +16,7 @@ function startRepeating(){
 function stopFunction(){
   clearInterval(myVar); // stop the timer
 }
+var times = [5000,6000,7000,8000]
 $("#pick").click(function winner() {
   // Get a random name, the winner
       nameArray= shuffle(nameArray);
@@ -43,7 +44,7 @@ $("#pick").click(function winner() {
     if($('.item-winner').hasClass(id) == false){
       $(".menu1").append('<li class="item-winner '+ id +'">'+ winner.replace(/🎉/g, '') +'</li>')
     }
-},5000) // stop it after 10seconds
+}, 5000) // stop it after 10seconds
   
 });
   

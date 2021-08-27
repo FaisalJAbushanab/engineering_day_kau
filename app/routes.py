@@ -199,7 +199,7 @@ def dashboard():
 @login_required
 def visitors():
     if current_user.roles in ['Admin', 'Mod']:
-        num = User.query.count()
+        num = User.query.filter_by(status='activated').count()
         page = request.args.get('page', 1, type=int)
         visitors = User.query.filter_by(status='activated').paginate(page=page, per_page=10)
         return render_template('admin/visitors.html', user=current_user, visitors=visitors, num=num)
