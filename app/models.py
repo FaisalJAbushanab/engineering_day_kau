@@ -43,3 +43,13 @@ class User(db.Model, UserMixin):
 class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
+
+class Record(db.Model, UserMixin):
+    __tablename__ = 'records'
+    id = db.Column(db.Integer, primary_key= True)
+    email = db.Column(db.String(150), unique=True)
+    unId = db.Column(db.String(10), nullable=False)
+    phoneNum = db.Column(db.String(10), nullable=False)
+    full_name = db.Column(db.String(150))
+    field = db.Column(db.String(60))
+    created_at= db.Column(db.DateTime, nullable=False, default=datetime.utcnow)

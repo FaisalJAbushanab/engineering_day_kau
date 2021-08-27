@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Engineering Day 22 | Sign Up{% endblock %}
+{% block title %}بوابة الهندسة 21 | استمارة التسجيل في اللقاء{% endblock %}
 {% block content %}
 
 <style>
@@ -68,38 +68,57 @@
         <form method="POST" action="">
           {{ form.hidden_tag() }}
           <br><br>
-          <h1>أهلًا بالضيف </h1>
+          <h1>استمارة التسجيل في لقاء بوابة الهندسة 21</h1>
+          <p style="margin-top: 30px;"> <span style="color: red;">*</span>  حقول اجبارية  </p>
           <br>
           <div class="mb-3">
             {{ form.fullname.label(class="form-label") }}
+            <span style="color: red;">*</span>
             {% if form.fullname.errors %}
-            {{ form.fullname(placeholder="full name", class="is-invalid form-control") }}
+            {{ form.fullname(placeholder="اسمك الثلاثي", class="is-invalid form-control") }}
             <div class="invalid-feedback">
               {% for error in form.fullname.errors %}
               <span>{{ error }}</span> <br>
               {% endfor %}
             </div>
             {% else %}
-            {{ form.fullname(placeholder="full name", class="form-control") }}
+            {{ form.fullname(placeholder="اسمك الثلاثي", class="form-control") }}
             {% endif %}
             </div>
 
             <div class="mb-3">
               {{ form.unid.label(class="form-label") }}
+              <span style="color: red;">*</span>
               {% if form.unid.errors %}
               {{ form.unid(placeholder="20XXXXX", class="is-invalid form-control") }}
               <div class="invalid-feedback">
                 {% for error in form.unid.errors %}
-                <span>{{ error }}</span><br>
+                <span>{{ error }}</span> <br>
                 {% endfor %}
               </div>
               {% else %}
               {{ form.unid(placeholder="20XXXXX", class="form-control") }}
               {% endif %}
               </div>
+
+              <div class="mb-3">
+                {{ form.phone.label(class="form-label") }}
+                <span style="color: red;">*</span>
+                {% if form.phone.errors %}
+                {{ form.phone(placeholder="05XXXXXXXX", class="is-invalid form-control") }}
+                <div class="invalid-feedback">
+                  {% for error in form.phone.errors %}
+                  <span>{{ error }}</span> <br>
+                  {% endfor %}
+                </div>
+                {% else %}
+                {{ form.phone(placeholder="05XXXXX", class="form-control") }}
+                {% endif %}
+                </div>
           
             <div class="mb-3">
           {{ form.email.label(class="form-label") }}
+          <span style="color: red;">*</span>
           {% if form.email.errors %}
           {{ form.email(placeholder="example@email.com", class="is-invalid form-control") }}
           <div class="invalid-feedback">
@@ -112,49 +131,22 @@
           {% endif %}
         </div>
 
-        <div class="mb-3">
-          {{ form.password.label(class="form-label") }}
-          {% if form.password.errors %}
-          <div class="invalid-feedback">
-            {{ form.password(placeholder="password", class="is-invalid form-control") }}
-            {% for error in form.password.errors %}
-            <span>{{ error }}</span> <br>
-            {% endfor %}
-          </div>
-          {% else %}
-          {{ form.password(placeholder="password", class="form-control") }}
-          {% endif %}
-        </div>
-
-        <div class="mb-3">
-          {{ form.confirm_password.label(class="form-label") }}
-          {% if form.confirm_password.errors %}
-          {{ form.confirm_password(placeholder="password confirmation", class="is-invalid form-control") }}
-          <div class="invalid-feedback">
-            {% for error in form.confirm_password.errors %}
-            <span>{{ error }}</span> <br>
-            {% endfor %}
-          </div>
-          {% else %}
-          {{ form.confirm_password(placeholder="password confirmation", class="form-control") }}
-          {% endif %}
-        </div>
+        
         <div class="mb-3">
           {{ form.field.label(class="form-label") }}
+          <span style="color: red;">*</span>
           {% if form.field.errors %}
           {{ form.field(class="is-invalid form-select") }}
           <div class="invalid-feedback">
             {% for error in form.field.errors %}
             <span>{{ error }}</span> <br>
-            {% endfor %}
+            {% endfor %} 
           </div>
           {% else %}
           {{ form.field(placeholder="password confirmation", class="form-select") }}
           {% endif %}
         </div>
-        
         <div class="mb-3">
-          <a href="{{ url_for('login') }}"> لديك حساب؟ سجل دخولك الان</a>
           <br>
           {{ form.submit(style="width: auto;", class='submitbutton') }}
         </div>

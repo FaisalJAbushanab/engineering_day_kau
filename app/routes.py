@@ -6,10 +6,10 @@ from flask_login.utils import login_required
 from flask_wtf.recaptcha import fields
 from pyasn1.type.univ import Null
 from sqlalchemy.sql.expression import true
-from app.models import User, UserSchema
+from app.models import User, UserSchema, Record
 from app.forms import (RegistrationForm, LoginForm, UpdateInfoForm,
                         UpdatePermissionsForm, RequestResetForm,
-                        ResetPasswordForm, BulkEmailForm)
+                        ResetPasswordForm, BulkEmailForm, addRecordForm)
 from app import app, db, bcrypt, mail
 from flask_login import login_user, current_user, logout_user
 import firebase_admin
@@ -84,67 +84,80 @@ def register():
     if current_user.is_authenticated:
         return redirect(url_for('index'))
     form = RegistrationForm()
-    if form.validate_on_submit():
-        qr_code = ''.join(random.SystemRandom()
-            .choice(string.ascii_uppercase + string.digits) for _ in range(20))
-        hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        small_email = form.email.data.lower()
-        isUser = User.query.filter(and_(User.email==small_email, User.status=='pending')).first()
-        if isUser:
-            token = s.dumps(isUser.email, salt='email-confirm')
-            msg = Message('تأكيد تسجيلك',
-                  sender=('21 بوابة الهندسة', 'noreplay@7alaqh.com'), recipients=[isUser.email])
-            msg.html = render_template('mail/confirm_email.html', token=token, user=isUser)
-            mail.send(msg)
+#     if form.validate_on_submit():
+#         qr_code = ''.join(random.SystemRandom()
+#             .choice(string.ascii_uppercase + string.digits) for _ in range(20))
+#         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+#         small_email = form.email.data.lower()
+#         isUser = User.query.filter(and_(User.email==small_email, User.status=='pending')).first()
+#         if isUser:
+#             token = s.dumps(isUser.email, salt='email-confirm')
+#             msg = Message('تأكيد تسجيلك',
+#                   sender=('21 بوابة الهندسة', 'noreplay@7alaqh.com'), recipients=[isUser.email])
+#             msg.html = render_template('mail/confirm_email.html', token=token, user=isUser)
+#             mail.send(msg)
 
-            flash('تم ارسال رسالة إلى بريدك '+ isUser.email + ' تحتوي على معلومات تفعيل حسابك لتتمكن من الوصول لبطاقتك الإلكترونية. في حال لم يصلك البريد تأكد من سلة المهملات spam ', 'warning')
-            return redirect(url_for('login'))
-        user = User(email=small_email, password=hashed_password, full_name=form.fullname.data, unId=form.unid.data, qrcode = qr_code, field=form.field.data)
-        db.session.add(user)
-        db.session.commit()
-        created = User.query.filter_by(email=form.email.data).first()
-        if created:
-            qr = qrcode.QRCode(
-                version=1,
-                error_correction=qrcode.constants.ERROR_CORRECT_M,
-                box_size=10,
-                border=4,
-            )
-            qr.add_data('checkout/user/'+str(created.id))
-            qr.make()
-            img = qr.make_image(fill_color="green", back_color="white")
-            img.save('app/static/images/qrcodes/' + qr_code + '.png','PNG')
-            path = 'app/static/images/qrcodes/' + qr_code + '.png'
-            path_to = str(created.id)+'/'+qr_code+'.png'
-            firebase = firebaseStore(path, path_to)
-            if firebase == 'success':
-                os.remove(path)
-        token = s.dumps(created.email, salt='email-confirm')
+#             flash('تم ارسال رسالة إلى بريدك '+ isUser.email + ' تحتوي على معلومات تفعيل حسابك لتتمكن من الوصول لبطاقتك الإلكترونية. في حال لم يصلك البريد تأكد من سلة المهملات spam ', 'warning')
+#             return redirect(url_for('login'))
+#         user = User(email=small_email, password=hashed_password, full_name=form.fullname.data, unId=form.unid.data, qrcode = qr_code, field=form.field.data)
+#         db.session.add(user)
+#         db.session.commit()
+#         created = User.query.filter_by(email=form.email.data).first()
+#         if created:
+#             qr = qrcode.QRCode(
+#                 version=1,
+#                 error_correction=qrcode.constants.ERROR_CORRECT_M,
+#                 box_size=10,
+#                 border=4,
+#             )
+#             qr.add_data('checkout/user/'+str(created.id))
+#             qr.make()
+#             img = qr.make_image(fill_color="green", back_color="white")
+#             img.save('app/static/images/qrcodes/' + qr_code + '.png','PNG')
+#             path = 'app/static/images/qrcodes/' + qr_code + '.png'
+#             path_to = str(created.id)+'/'+qr_code+'.png'
+#             firebase = firebaseStore(path, path_to)
+#             if firebase == 'success':
+#                 os.remove(path)
+#         token = s.dumps(created.email, salt='email-confirm')
 
-        msg = Message('تأكيد تسجيلك في بوابة الهندسة 21',
-                  sender=('21 بوابة الهندسة', 'noreplay@7alaqh.com'), recipients=[created.email])
-        msg.html = render_template('mail/confirm_email.html', token=token, user=created)
+#         msg = Message('تأكيد تسجيلك في بوابة الهندسة 21',
+#                   sender=('21 بوابة الهندسة', 'noreplay@7alaqh.com'), recipients=[created.email])
+#         msg.html = render_template('mail/confirm_email.html', token=token, user=created)
         
-# f'''<h2 style="text-align: center"> <img src="/app/static/images/logo.svg" width="200px" /> </h2> <br> <br> <p style="text-align: right;"> </b> مرحباً عزيزي,,,</b> </p> <br>
-# <p style="text-align: right;"> نشكرك على تسجيلك للحضور في بوابة الهندسة 21 لتتمكن لدخول إلى بطاقتك الإلكترونية، يتوجب عليك تفعيل حسابك من خلال الضغط على الزر أدناه </p>"
-# <br> <p style="text-align: center;"> <a href="{url_for('confirm_email', token=token, _external=True)}" style="color: white; background-color: green; padding: 10px 20px;">تفعيل حسابي </a> </p>
-# <br> <br>
-# <p style="text-align: right;"> اذا كنت لا تستطيع الضغط على الزر أعلاه فالرجاء نسخ الرابط التالي ولصقه في متصفحك ليتم تفعيل حسابك </P>
-# <a href="{url_for('confirm_email', token=token, _external=True)}"> {url_for('confirm_email', token=token, _external=True)} </a> 
-# <br style="text-align: right;">
-# <p style="text-align: right;"> للدعم والمساعدة الرجاء التواصل معنا عبر البريد الإلكتروني: support@kau-enggate21.com </p>
+# # f'''<h2 style="text-align: center"> <img src="/app/static/images/logo.svg" width="200px" /> </h2> <br> <br> <p style="text-align: right;"> </b> مرحباً عزيزي,,,</b> </p> <br>
+# # <p style="text-align: right;"> نشكرك على تسجيلك للحضور في بوابة الهندسة 21 لتتمكن لدخول إلى بطاقتك الإلكترونية، يتوجب عليك تفعيل حسابك من خلال الضغط على الزر أدناه </p>"
+# # <br> <p style="text-align: center;"> <a href="{url_for('confirm_email', token=token, _external=True)}" style="color: white; background-color: green; padding: 10px 20px;">تفعيل حسابي </a> </p>
+# # <br> <br>
+# # <p style="text-align: right;"> اذا كنت لا تستطيع الضغط على الزر أعلاه فالرجاء نسخ الرابط التالي ولصقه في متصفحك ليتم تفعيل حسابك </P>
+# # <a href="{url_for('confirm_email', token=token, _external=True)}"> {url_for('confirm_email', token=token, _external=True)} </a> 
+# # <br style="text-align: right;">
+# # <p style="text-align: right;"> للدعم والمساعدة الرجاء التواصل معنا عبر البريد الإلكتروني: support@kau-enggate21.com </p>
 
-# '''
-#     msg.body = f'''لإعاادة تعين كلمة المرور الخاصة بك، الرجاء النقر على الرابط أو لصقه في المتصفح:
-# {url_for('reset_token', token=token, _external=True)}
+# # '''
+# #     msg.body = f'''لإعاادة تعين كلمة المرور الخاصة بك، الرجاء النقر على الرابط أو لصقه في المتصفح:
+# # {url_for('reset_token', token=token, _external=True)}
 
-# اذا كنت لم تطلب اعادة تعين كلمة المرور فالرجاء تجاهل هذه الرسالة.
-# '''
-        mail.send(msg)
+# # اذا كنت لم تطلب اعادة تعين كلمة المرور فالرجاء تجاهل هذه الرسالة.
+# # '''
+#         mail.send(msg)
 
-        flash('تم ارسال رسالة إلى بريدك '+ created.email + ' تحتوي على معلومات تفعيل حسابك لتتمكن من الوصول لبطاقتك الإلكترونية. في حال لم يصلك البريد تأكد من سلة المهملات spam ', 'warning')
-        return redirect(url_for('login'))
+#         flash('تم ارسال رسالة إلى بريدك '+ created.email + ' تحتوي على معلومات تفعيل حسابك لتتمكن من الوصول لبطاقتك الإلكترونية. في حال لم يصلك البريد تأكد من سلة المهملات spam ', 'warning')
+#         return redirect(url_for('login'))
     return render_template('auth/register.html', form=form, page='register')
+
+@app.route('/register', methods=['GET', 'POST'])
+def newData():
+    form = addRecordForm()
+    
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            record = Record(email=form.email.data, unId=form.unid.data, phoneNum=form.phone.data, full_name= form.fullname.data, field=form.field.data)
+            flash('تم تسجيل بيانتك للدخول في السحب', 'warning')
+            return redirect(url_for('index'))
+    return render_template('add_record.html', form=form, page='register')
+
+
 
 @app.route('/confirm_email/<token>')
 def confirm_email(token):
@@ -203,6 +216,14 @@ def visitors():
         page = request.args.get('page', 1, type=int)
         visitors = User.query.filter_by(status='activated').paginate(page=page, per_page=10)
         return render_template('admin/visitors.html', user=current_user, visitors=visitors, num=num)
+@app.route('/dashboard/records')
+@login_required
+def records():
+    if current_user.roles in ['Admin', 'Mod']:
+        num = Record.query.all().count()
+        page = request.args.get('page', 1, type=int)
+        visitors = Record.query.all().paginate(page=page, per_page=10)
+        return render_template('admin/records.html', user=current_user, visitors=visitors, num=num)
 @app.route('/dashboard/user/<int:user_id>/viewCard', methods=['GET', 'POST'])
 @login_required
 def viewCard(user_id):

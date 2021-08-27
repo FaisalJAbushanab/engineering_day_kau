@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Engineering Day 22 | dashboard{% endblock %}
+{% block content %}
+
+<style>
+    body{
+        font-family: 'Tajawalbold';
+        background-color: white !important;
+    }
+    
+</style>
+
+<div class="container" style="margin: 50px auto">
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">الاسم الثلاثي</th>
+        <th scope="col">الايميل</th>
+        <th scope="col">تاريخ التسجيل</th>
+        <th scope="col">الصلاحية</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for visitor in visitors.items %}
+        <tr>
+          <th scope="col"><a href="{{ url_for('viewCard', user_id=visitor.id) }}">{{ visitor.id }}</a></th>
+          <th scope="col">{{ visitor.full_name }}</th>
+          <th scope="col">{{ visitor.email }}</th>
+          <th scope="col">{{ visitor.created_at.strftime('%Y-%m-%d') }} </th>
+          <th scope="col">{{ visitor.roles }} </th>
+        </tr>
+        {% endfor %}
+    </tbody>
+  </table>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item {{ 'disabled' if visitors.page == 1 }}">
+        <a class="page-link" href="{{ url_for('visitors', page=(visitors.page-1)) }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% for page_num in visitors.iter_pages() %}
+      {% if page_num %}
+      <li class="page-item {{ 'disabled' if visitors.page == page_num }}"><a class="page-link" href="{{ url_for('visitors', page=page_num) }}">{{ page_num }}</a></li>
+      {% endif %}
+      {% endfor %}
+      <li class="page-item {{ 'disabled' if (((num/10) |round(method='ceil')|int) == visitors.page)  }}">
+        <a class="page-link" href="{{ url_for('visitors', page=(visitors.page+1)) }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+{% endblock %}
