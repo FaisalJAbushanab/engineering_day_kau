@@ -52,4 +52,12 @@ class Record(db.Model, UserMixin):
     phoneNum = db.Column(db.String(10), nullable=False)
     full_name = db.Column(db.String(150))
     field = db.Column(db.String(60))
+    winner = db.Column(db.String(50), default="no")
     created_at= db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+
+class Settings(db.Model, UserMixin):
+    __tablename__ = 'settings'
+    id = db.Column(db.Integer, primary_key= True)
+    set = db.Column(db.String(15), nullable=False)
+    value = db.Column(db.String(15), nullable=False)
+    

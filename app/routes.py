@@ -153,6 +153,8 @@ def newData():
     if request.method == 'POST':
         if form.validate_on_submit():
             record = Record(email=form.email.data, unId=form.unid.data, phoneNum=form.phone.data, full_name= form.fullname.data, field=form.field.data)
+            db.session.add(record)
+            db.session.commit()
             flash('تم تسجيل بيانتك للدخول في السحب', 'warning')
             return redirect(url_for('index'))
     return render_template('add_record.html', form=form, page='register')
@@ -220,9 +222,9 @@ def visitors():
 @login_required
 def records():
     if current_user.roles in ['Admin', 'Mod']:
-        num = Record.query.all().count()
+        num = Record.query.count()
         page = request.args.get('page', 1, type=int)
-        visitors = Record.query.all().paginate(page=page, per_page=10)
+        visitors = Record.query.paginate(page=page, per_page=10)
         return render_template('admin/records.html', user=current_user, visitors=visitors, num=num)
 @app.route('/dashboard/user/<int:user_id>/viewCard', methods=['GET', 'POST'])
 @login_required
