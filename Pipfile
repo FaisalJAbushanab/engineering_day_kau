@@ -20,6 +20,8 @@ flask-marshmallow = "*"
 marshmallow-sqlalchemy = "*"
 firebase-admin = "*"
 psycopg2 = "*"
+xlsxwriter = "*"
+pandas = "*"
 
 [dev-packages]
 

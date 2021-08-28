@@ -126,3 +126,11 @@ class addRecordForm(FlaskForm):
 class settingsForm(FlaskForm):
     regForm = BooleanField()
     submit = SubmitField('ارسل')
+
+class exportForm(FlaskForm):
+    table = SelectField('الجدول', choices=[('null', 'اختر'), ('records', 'استمارة تسجيل اللقاء')], validators=[DataRequired()])
+    submit = SubmitField('تصدير')
+    def validate_table(self, table):
+        data = ['records']
+        if table.data not in data:
+            raise ValidationError('الجدول غير موجود')

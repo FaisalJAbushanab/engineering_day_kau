@@ -11,7 +11,7 @@ from app.models import Settings, User, UserSchema, Record
 from app.forms import (RegistrationForm, LoginForm, UpdateInfoForm,
                         UpdatePermissionsForm, RequestResetForm,
                         ResetPasswordForm, BulkEmailForm, addRecordForm,
-                        settingsForm)
+                        settingsForm, exportForm)
 from app import app, db, bcrypt, mail
 from flask_login import login_user, current_user, logout_user
 import firebase_admin
@@ -23,7 +23,8 @@ from flask_mail import Message
 import qrcode
 from sqlalchemy import or_, and_
 from itsdangerous import URLSafeTimedSerializer
-import requests
+import requests, os.path
+import pandas as pd
 
 firebaseConfig = {
     "apiKey": "AIzaSyDiXLqriZJblxEBr-acp1L_sG3qR82U434",
@@ -277,8 +278,34 @@ def settings():
         db.session.commit()
         flash('تم الحفظ', 'success')
         return redirect(url_for('settings'))
+
+def to_dict(row):
+    if row is None:
+        return None
+
+    rtn_dict = dict()
+    keys = row.__table__.columns.keys()
+    for key in keys:
+        rtn_dict[key] = getattr(row, key)
+    return rtn_dict
+
+@app.route('/dashboard/export_table', methods=['GET', 'POST'])
+@login_required
+def export():
+    form = exportForm()
+    path = os.path.exists('table.xlsx')
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            if form.table.data == 'records':
+                data = Record.query.all()
+                data_list =[to_dict(item) for item in data]
+                df = pd.DataFrame(data_list)
+                filename = 'table.xlsx'
+                writer = pd.ExcelWriter(filename)
+                df.to_excel(writer, sheet_name='records')
+                writer.save()
         
-    return render_template('admin/settings.html', page='settings', form=form, settings=settings)
+    return render_template('admin/export.html', page='export', form=form, check=path)
 @app.route('/home')
 @login_required
 def home():
