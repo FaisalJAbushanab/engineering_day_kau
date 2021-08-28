@@ -65,6 +65,7 @@
 
       </div>
       <div class="col-md-6 col-xs-12 box">
+          {% if stat == 'on' %}
         <form method="POST" action="">
           {{ form.hidden_tag() }}
           <br><br>
@@ -151,6 +152,14 @@
           {{ form.submit(style="width: auto;", class='submitbutton') }}
         </div>
         </form>
+        {% else %}
+        <p>عذرا! التسجيل حاليا مغلق الرجاء العودة في وقت لاحق</p>
+        <style>
+            #background{
+                min-height: 400px;
+            }
+        </style>
+        {% endif %}
       </div>
     </div>
   </div>

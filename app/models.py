@@ -59,5 +59,5 @@ class Settings(db.Model, UserMixin):
     __tablename__ = 'settings'
     id = db.Column(db.Integer, primary_key= True)
     set = db.Column(db.String(15), unique=True, nullable=False)
-    value = db.Column(db.String(15), nullable=False)
+    value = db.Column(db.Boolean, nullable=False, default=False)
     

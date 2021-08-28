@@ -6,7 +6,7 @@ from flask_login.utils import login_required
 from flask_wtf.recaptcha import fields
 from pyasn1.type.univ import Null
 from sqlalchemy.sql.expression import true
-from app.models import User, UserSchema, Record
+from app.models import Settings, User, UserSchema, Record
 from app.forms import (RegistrationForm, LoginForm, UpdateInfoForm,
                         UpdatePermissionsForm, RequestResetForm,
                         ResetPasswordForm, BulkEmailForm, addRecordForm)
@@ -149,7 +149,7 @@ def register():
 @app.route('/register', methods=['GET', 'POST'])
 def newData():
     form = addRecordForm()
-    
+    stat = Settings.query.get(1)
     if request.method == 'POST':
         if form.validate_on_submit():
             record = Record(email=form.email.data, unId=form.unid.data, phoneNum=form.phone.data, full_name= form.fullname.data, field=form.field.data)
@@ -157,7 +157,10 @@ def newData():
             db.session.commit()
             flash('تم تسجيل بيانتك للدخول في السحب', 'warning')
             return redirect(url_for('index'))
-    return render_template('add_record.html', form=form, page='register')
+    if stat.value == 'off':
+        return render_template('add_record.html', form=form, page='register', stat='off')
+    else:
+        return render_template('add_record.html', form=form, page='register', stat='on')
 
 
 
@@ -248,6 +251,16 @@ def viewCard(user_id):
     qrcode_link = getURL(path)
     return render_template('admin/card.html', user=user, qr=qrcode_link, form=form)
 
+@app.route('/dashboard/settings', methods=['GET', 'POST'])
+@login_required
+def settings():
+    set = Settings.query.filter_by(set='regForm').first()
+    regForm = set.value
+    settings = {
+        "regForm": regForm
+    }
+        
+    return render_template('admin/settings.html', settings=settings)
 @app.route('/home')
 @login_required
 def home():
@@ -426,7 +439,7 @@ def reset_token(token):
 @app.route('/draw')
 @login_required
 def draw():
-    users = User.query.filter(and_(User.status=='activated', User.roles=='Guest')).all()
+    users = Record.query.all()
     # user_schema = UserSchema()
     # users = user_schema.jsonify(users)
     return render_template('admin/draw.html', page='draw', users=users)
@@ -454,7 +467,7 @@ def checkout(user_id):
 @app.route('/get_users')
 @login_required
 def winners():
-    users = User.query.filter(and_(User.status=='activated', User.roles=='Guest')).all()
+    users = Record.query.all()
     user_schema = UserSchema(many=True)
     return user_schema.jsonify(users)
 
