@@ -42,7 +42,17 @@ $("#pick").click(function winner() {
     winner = "🎉" + " " + winner.full_name + " " + "🎉";
     $("#winner").text(winner);
     if($('.item-winner').hasClass(id) == false){
-      $(".menu1").append('<li class="item-winner '+ id +'">'+ winner.replace(/🎉/g, '') +'</li>')
+      $.ajax({
+        url: "/winner/"+id,
+        type: "post",
+        data: 'text' ,
+        success: function (response) {
+          $(".menu1").append('<li class="item-winner '+ id +'">'+ winner.replace(/🎉/g, '') +'</li>')
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+           console.log(textStatus, errorThrown);
+        }
+    });
     }
 }, 5000) // stop it after 10seconds
   

@@ -61,9 +61,11 @@
             {{ form.table(class="form-select") }}
             {% endif %}
           </div>
+          {% if check %}
           <p>
             <a href="/table.xlsx" download>table.xlsx</a>
           </p>
+          {% endif %}
           {{ form.submit(class="submitbutton") }}
             
           </form>

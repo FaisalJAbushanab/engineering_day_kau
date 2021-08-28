@@ -257,7 +257,6 @@ def viewCard(user_id):
 @app.route('/dashboard/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
-    form = settingsForm()
     set = Settings.query.filter_by(set='regForm').first()
     winner = Settings.query.filter_by(set='Winning').first()
     regForm = set.value
@@ -278,6 +277,7 @@ def settings():
         db.session.commit()
         flash('تم الحفظ', 'success')
         return redirect(url_for('settings'))
+    return render_template('admin/settings.html', settings=settings, page='settings')
 
 def to_dict(row):
     if row is None:
@@ -293,7 +293,7 @@ def to_dict(row):
 @login_required
 def export():
     form = exportForm()
-    path = os.path.exists('table.xlsx')
+
     if request.method == 'POST':
         if form.validate_on_submit():
             if form.table.data == 'records':
@@ -304,6 +304,7 @@ def export():
                 writer = pd.ExcelWriter(filename)
                 df.to_excel(writer, sheet_name='records')
                 writer.save()
+                path = os.path.exists('table.xlsx')
         
     return render_template('admin/export.html', page='export', form=form, check=path)
 @app.route('/home')
@@ -516,6 +517,14 @@ def winners():
     user_schema = UserSchema(many=True)
     return user_schema.jsonify(users)
 
+@app.route('/winner/<int:id>', methods=['POST'])
+def recordWinner(id):
+    setting = Settings.query.get(2)
+    if setting.value:
+        winner = Record.query.get_or_404(id)
+        winner.winner = 'yes'
+        db.session.commit()
+        return 'Done'
 @app.errorhandler(404)
 def page_not_found(e):
     # note that we set the 404 status explicitly
