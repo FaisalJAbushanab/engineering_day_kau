@@ -55,6 +55,11 @@
         border: none;
         outline: none;
     }
+    .p{
+      font-family: Tajawal-medium;
+      font-size: 18px;
+      padding: 30px;
+    }
 </style>
 <div id="background">
 <div class="overlay0"></div>
@@ -153,10 +158,11 @@
         </div>
         </form>
         {% else %}
-        <p>عذرا! التسجيل حاليا مغلق الرجاء العودة في وقت لاحق</p>
+        <p class="p">عذراُ، التسجيل غير متاح الآن <br>
+        سيتم فتح التسجيل اثناء اللقاء</p>
         <style>
             #background{
-                min-height: 450px;
+                min-height: 550px;
             }
         </style>
         {% endif %}
