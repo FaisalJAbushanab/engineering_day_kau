@@ -116,7 +116,7 @@ input:checked + .slider:before {
           <div class="mb-3">
             <label for="" class="form-label">تسجيل الفائز</label> <br>
             <label class="switch">
-              <input type="checkbox">
+                <input type="checkbox" name="mycheckbox" class="checkbox" value="win" {{ 'checked' if settings.win == True}}>
               <span class="slider round"></span>
             </label>
         </div>

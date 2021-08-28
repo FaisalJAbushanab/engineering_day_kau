@@ -159,10 +159,10 @@ def newData():
             db.session.commit()
             flash('تم تسجيل بيانتك للدخول في السحب', 'warning')
             return redirect(url_for('index'))
-    if stat.value == 'off':
-        return render_template('add_record.html', form=form, page='register', stat='off')
+    if stat.value == False:
+        return render_template('add_record.html', form=form, page='register', stat=False)
     else:
-        return render_template('add_record.html', form=form, page='register', stat='on')
+        return render_template('add_record.html', form=form, page='register', stat=True)
 
 
 
@@ -258,19 +258,24 @@ def viewCard(user_id):
 def settings():
     form = settingsForm()
     set = Settings.query.filter_by(set='regForm').first()
+    winner = Settings.query.filter_by(set='Winning').first()
     regForm = set.value
+    win = winner.value
     settings = {
-        "regForm": regForm
+        "regForm": regForm,
+        "win": win
     }
-    form.regForm.data = regForm
     if request.method == 'POST':
-
         if 'regForm' in request.form.getlist("mycheckbox"):
             set.value = True
         else:
             set.value = False
+        if 'win' in request.form.getlist("mycheckbox"):
+            winner.value = True
+        else:
+            winner.value = False
         db.session.commit()
-        flash('تم التغير', 'success')
+        flash('تم الحفظ', 'success')
         return redirect(url_for('settings'))
         
     return render_template('admin/settings.html', page='settings', form=form, settings=settings)
