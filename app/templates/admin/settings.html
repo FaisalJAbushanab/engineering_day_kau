@@ -104,11 +104,12 @@ input:checked + .slider:before {
     </div>
     <div class="body" dir="ltr">
         <div class="container">
-        <form method="POST" action="">
+        <form id="form" method="POST" action="">
+            {{ form.csrf_token() }}
           <div class="mb-3">
               <label for="" class="form-label">استمارة تسجيل الحضور</label> <br>
               <label class="switch">
-                <input type="checkbox" {{ 'checked' if settings.regForm =='on' }}>
+                <input type="checkbox" name="mycheckbox" class="checkbox" value="regForm" {{ 'checked' if settings.regForm == True}}>
                 <span class="slider round"></span>
               </label>
           </div>
@@ -127,5 +128,13 @@ input:checked + .slider:before {
 </div>
 
 <script src="../../static/js/note.js"></script>
+<script type="text/javascript">  
+    $(function(){
+     $('.checkbox').on('change',function(){
+
+        $('#form').submit();
+        });
+    });
+</script>
 
 {% endblock %}

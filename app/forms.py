@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import validators
 from wtforms import StringField, PasswordField, RadioField, SubmitField, validators, IntegerField
-from wtforms.fields.core import SelectField
+from wtforms.fields.core import BooleanField, SelectField
 from wtforms.fields.simple import TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from app.models import User, Record
@@ -111,7 +111,7 @@ class addRecordForm(FlaskForm):
         user = Record.query.filter_by(unId=unid.data).first()
         if user:
             raise ValidationError('لقد قمت بالتسجيل من قبل')
-            
+
     def validate_phone(self, phone):
         if not phone.data.isdecimal():
             raise ValidationError('يجب اختيار تخصص')
@@ -123,3 +123,6 @@ class addRecordForm(FlaskForm):
         user = Record.query.filter_by(full_name=fullname.data).first()
         if user:
             raise ValidationError('لقد قمت بالتسجيل من قبل')
+class settingsForm(FlaskForm):
+    regForm = BooleanField()
+    submit = SubmitField('ارسل')

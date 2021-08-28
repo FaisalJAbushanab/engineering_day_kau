@@ -3,13 +3,15 @@ from operator import sub
 from flask import render_template, url_for, flash, redirect, request, jsonify, abort
 import flask
 from flask_login.utils import login_required
+from flask_wtf import form
 from flask_wtf.recaptcha import fields
 from pyasn1.type.univ import Null
 from sqlalchemy.sql.expression import true
 from app.models import Settings, User, UserSchema, Record
 from app.forms import (RegistrationForm, LoginForm, UpdateInfoForm,
                         UpdatePermissionsForm, RequestResetForm,
-                        ResetPasswordForm, BulkEmailForm, addRecordForm)
+                        ResetPasswordForm, BulkEmailForm, addRecordForm,
+                        settingsForm)
 from app import app, db, bcrypt, mail
 from flask_login import login_user, current_user, logout_user
 import firebase_admin
@@ -254,13 +256,24 @@ def viewCard(user_id):
 @app.route('/dashboard/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
+    form = settingsForm()
     set = Settings.query.filter_by(set='regForm').first()
     regForm = set.value
     settings = {
         "regForm": regForm
     }
+    form.regForm.data = regForm
+    if request.method == 'POST':
+
+        if 'regForm' in request.form.getlist("mycheckbox"):
+            set.value = True
+        else:
+            set.value = False
+        db.session.commit()
+        flash('تم التغير', 'success')
+        return redirect(url_for('settings'))
         
-    return render_template('admin/settings.html', settings=settings)
+    return render_template('admin/settings.html', page='settings', form=form, settings=settings)
 @app.route('/home')
 @login_required
 def home():
