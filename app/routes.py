@@ -293,7 +293,7 @@ def to_dict(row):
 @login_required
 def export():
     form = exportForm()
-
+    path= False
     if request.method == 'POST':
         if form.validate_on_submit():
             if form.table.data == 'records':
