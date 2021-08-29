@@ -135,7 +135,7 @@
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   <li><a class="dropdown-item disabled {{ 'item-active' if sub and sub == 'efgfg' }}" href="{{  url_for('index')  }}">الرؤية والهندسة</a></li>
                   <li><a class="dropdown-item disabled {{ 'item-active' if sub and sub == 'index' }}" href="{{  url_for('index')  }}">مصادر التعلم</a></li>
-                  <li><a class="dropdown-item disabled {{ 'item-active' if sub and sub == 'engineering_fields' }}" href="{{  url_for('resources', page='engineering_fields')  }}">التخصصات الهندسية</a></li>
+                  <li><a class="dropdown-item {{ 'item-active' if sub and sub == 'engineering_fields' }}" href="{{  url_for('resources', page='engineering_fields')  }}">التخصصات الهندسية</a></li>
                   <li><a class="dropdown-item disabled {{ 'item-active' if sub and sub == 'index' }}" href="{{  url_for('index')  }}">رحلة الطالب</a></li>
                 </ul>
               </li>
