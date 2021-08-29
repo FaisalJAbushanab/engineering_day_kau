@@ -101,28 +101,28 @@ class addRecordForm(FlaskForm):
     field = SelectField('التخصص', choices=['اختر', 'هندسة مستجد', 'هندسة الطيران', 'الهندسة الكيميائية وهندسة المواد', 'الهندسة المدنية والبيئية', 'الهندسة الكهربائية وهندسة الحاسبات', 'الهندسة الصناعية', 'الهندسة النووية', 'هندسة الإنتاج وتصميم النظم الميكانيكية', 'هندسة التعدين', 'الهندسة الحرارية'], validators=[DataRequired()])
     submit = SubmitField('ارسال')
 
-    # def validate_field(self, field):
-    #     data = ['هندسة مستجد', 'هندسة الطيران', 'الهندسة الكيميائية وهندسة المواد', 'الهندسة المدنية والبيئية', 'الهندسة الكهربائية وهندسة الحاسبات', 'الهندسة الصناعية', 'الهندسة النووية', 'هندسة الإنتاج وتصميم النظم الميكانيكية', 'هندسة التعدين', 'الهندسة الحرارية']
-    #     if field.data not in data:
-    #         raise ValidationError('يجب اختيار تخصص صحيح')
-    # def validate_unid(self, unid):
-    #     if not unid.data.isdecimal():
-    #         raise ValidationError('الرقم الجامعي يجب ان يكون ارقام فقط')
-    #     user = Record.query.filter_by(unId=unid.data).first()
-    #     if user:
-    #         raise ValidationError('لقد قمت بالتسجيل من قبل')
+    def validate_field(self, field):
+        data = ['هندسة مستجد', 'هندسة الطيران', 'الهندسة الكيميائية وهندسة المواد', 'الهندسة المدنية والبيئية', 'الهندسة الكهربائية وهندسة الحاسبات', 'الهندسة الصناعية', 'الهندسة النووية', 'هندسة الإنتاج وتصميم النظم الميكانيكية', 'هندسة التعدين', 'الهندسة الحرارية']
+        if field.data not in data:
+            raise ValidationError('يجب اختيار تخصص صحيح')
+    def validate_unid(self, unid):
+        if not unid.data.isdecimal():
+            raise ValidationError('الرقم الجامعي يجب ان يكون ارقام فقط')
+        user = Record.query.filter_by(unId=unid.data).first()
+        if user:
+            raise ValidationError('لقد قمت بالتسجيل من قبل')
 
-    # def validate_phone(self, phone):
-    #     if not phone.data.isdecimal():
-    #         raise ValidationError('يجب اختيار تخصص')
-    # def validate_email(self, email):
-    #     user = Record.query.filter_by(email=email.data).first()
-    #     if user:
-    #         raise ValidationError('لقد قمت بالتسجيل من قبل')
-    # def validate_fullname(self, fullname):
-    #     user = Record.query.filter_by(full_name=fullname.data).first()
-    #     if user:
-    #         raise ValidationError('لقد قمت بالتسجيل من قبل')
+    def validate_phone(self, phone):
+        if not phone.data.isdecimal():
+            raise ValidationError('يجب اختيار تخصص')
+    def validate_email(self, email):
+        user = Record.query.filter_by(email=email.data).first()
+        if user:
+            raise ValidationError('لقد قمت بالتسجيل من قبل')
+    def validate_fullname(self, fullname):
+        user = Record.query.filter_by(full_name=fullname.data).first()
+        if user:
+            raise ValidationError('لقد قمت بالتسجيل من قبل')
 class settingsForm(FlaskForm):
     regForm = BooleanField()
     submit = SubmitField('ارسل')

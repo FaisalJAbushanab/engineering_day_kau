@@ -47,7 +47,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
 class Record(db.Model, UserMixin):
     __tablename__ = 'records'
     id = db.Column(db.Integer, primary_key= True)
-    email = db.Column(db.String(150), unique=False)
+    email = db.Column(db.String(150), unique=True)
     unId = db.Column(db.String(10), nullable=False)
     phoneNum = db.Column(db.String(10), nullable=False)
     full_name = db.Column(db.String(150))
