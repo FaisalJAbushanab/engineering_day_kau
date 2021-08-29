@@ -114,7 +114,11 @@ class addRecordForm(FlaskForm):
 
     def validate_phone(self, phone):
         if not phone.data.isdecimal():
-            raise ValidationError('يجب اختيار تخصص')
+            raise ValidationError('الرقم غير صحيح')
+        user = Record.query.filter_by(phoneNum=phone.data).first()
+        if user:
+            raise ValidationError('لقد قمت بالتسجيل من قبل')
+            
     def validate_email(self, email):
         user = Record.query.filter_by(email=email.data).first()
         if user:
