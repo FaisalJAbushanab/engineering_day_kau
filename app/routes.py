@@ -154,7 +154,7 @@ def newData():
     form = addRecordForm()
     stat = Settings.query.get(1)
     if request.method == 'POST':
-        if form.validate_on_submit():
+        # if form.validate_on_submit():
             record = Record(email=form.email.data, unId=form.unid.data, phoneNum=form.phone.data, full_name= form.fullname.data, field=form.field.data)
             db.session.add(record)
             db.session.commit()
