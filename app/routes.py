@@ -257,8 +257,8 @@ def viewCard(user_id):
 @app.route('/dashboard/settings', methods=['GET', 'POST'])
 @login_required
 def settings():
-    set = Settings.query.filter_by(set='regForm').first()
-    winner = Settings.query.filter_by(set='Winning').first()
+    set = Settings.query.filter_by(key='regForm').first()
+    winner = Settings.query.filter_by(key='Winning').first()
     regForm = set.value
     win = winner.value
     settings = {
@@ -535,6 +535,6 @@ def page_not_found(e):
     # note that we set the 404 status explicitly
     return render_template('401.html'), 401
 
-@app.route('/loaderio-7cb5eb28a33a0de0db94a487bda39100/')
+@app.route('/loaderio-a30e915499e8b2d6cb9675796e88ec7a/')
 def test():
-    return render_template('loaderio-7cb5eb28a33a0de0db94a487bda39100.html')
+    return render_template('loaderio-a30e915499e8b2d6cb9675796e88ec7a.html')
