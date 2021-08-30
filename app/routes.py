@@ -513,7 +513,7 @@ def checkout(user_id):
 @app.route('/get_users')
 @login_required
 def winners():
-    users = User.query.all()
+    users = Record.query.all()
     user_schema = UserSchema(many=True)
     return user_schema.jsonify(users)
 
