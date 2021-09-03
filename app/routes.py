@@ -300,11 +300,11 @@ def export():
                 data = Record.query.all()
                 data_list =[to_dict(item) for item in data]
                 df = pd.DataFrame(data_list)
-                filename = 'table.xlsx'
+                filename = 'static/excel/table.xlsx'
                 writer = pd.ExcelWriter(filename)
                 df.to_excel(writer, sheet_name='records')
                 writer.save()
-                path = os.path.exists('table.xlsx')
+                path = os.path.exists(filename)
         
     return render_template('admin/export.html', page='export', form=form, check=path)
 @app.route('/home')
