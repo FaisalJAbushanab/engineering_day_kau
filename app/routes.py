@@ -300,7 +300,7 @@ def export():
                 data = Record.query.all()
                 data_list =[to_dict(item) for item in data]
                 df = pd.DataFrame(data_list)
-                filename = 'static/excel/table.xlsx'
+                filename = url_for('static', filename='excel/table.xlsx')
                 writer = pd.ExcelWriter(filename)
                 df.to_excel(writer, sheet_name='records')
                 writer.save()
