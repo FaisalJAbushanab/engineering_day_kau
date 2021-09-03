@@ -63,7 +63,7 @@
           </div>
           {% if check %}
           <p>
-            <a href="/app/static/excel/table.xlsx" download>table.xlsx</a>
+            <a href="{{ url_for('static', filename='excel/table.xlsx') }}" download>table.xlsx</a>
           </p>
           {% endif %}
           {{ form.submit(class="submitbutton") }}
